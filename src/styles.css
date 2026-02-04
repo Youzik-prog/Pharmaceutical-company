@@ -4,6 +4,10 @@
 
 @import "tailwindcss";
 
+
 @theme {
-    --font-display: "Inter";
+    --color-primary: #141828;
+    --color-secondary: #56627D;
+
+    --font-sans: "Inter";
 }
