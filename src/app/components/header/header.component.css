@@ -3,7 +3,7 @@
 
 @layer components {
   .navbar-link {
-    @apply flex gap-2 text-secondary;
+    @apply flex items-center h-full pl-4 pr-4 gap-2 text-secondary rounded-md hover:bg-sky-50 focus:bg-sky-50 transition-all duration-200;
   }
 
   .navbar-item {
