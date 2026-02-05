@@ -14,6 +14,10 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
+    "baseUrl": "./",
+    "paths": {
+      "@theme": ["src/styles.css"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
