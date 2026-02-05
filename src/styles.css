@@ -10,4 +10,12 @@
     --color-secondary: #56627D;
 
     --font-sans: "Inter";
+
+
+}
+
+@layer components {
+    .component-container {
+        @apply pl-6 pr-6;
+    }
 }

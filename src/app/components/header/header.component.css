@@ -7,6 +7,6 @@
   }
 
   .navbar-item {
-    @apply h-full;
+    @apply h-full flex justify-center items-center w-10 cursor-pointer rounded-full;
   }
 }
