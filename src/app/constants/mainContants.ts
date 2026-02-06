@@ -1,0 +1,1 @@
+export const API_URL = 'https://dummyjson.com/c/b747-c860-47d0-b1e1';
