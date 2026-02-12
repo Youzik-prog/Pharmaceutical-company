@@ -1,0 +1,16 @@
+@import "./../../../styles.css";
+
+@layer components {
+
+    .cell {
+        @apply pr-3;
+    }
+
+    .th {
+        @apply font-medium text-left;
+    }
+
+    .td-font {
+        @apply text-secondary;
+    }
+}

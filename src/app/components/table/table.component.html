@@ -1,0 +1,40 @@
+<div class="mb-5">
+    <h1 class="page-name">List of medications in development</h1>
+    <p class="page-description">Brief summary of testing processes</p>
+</div>
+<!-- Table -->
+<div class="w-full overflow-x-auto overflow-y-hidden">
+    <table class="w-full border-collapse">
+        <thead>
+            <tr class="h-8 border-b-2 border-t-2 border-gray-200">
+                <th class="th cell">NAME</th>
+                <th class="th cell">LOCATION</th>
+                <th class="th cell">START DATE</th>
+                <th class="th cell">END DATE</th>
+                <th class="th cell">SUCCESS REACTION</th>
+                <th class="th cell">PROCESS</th>
+                <th class="th cell">STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (row of allDrugs(); track row) {
+                <tr class="h-14 border-b-2 border-gray-200">
+                    <td class="cell text-accent font-semibold">{{ row.name }}</td>
+                    <td class="cell td-font">{{ row.location }}</td>
+                    <td class="cell td-font">{{ row.startDate }}</td>
+                    <td class="cell td-font">{{ row.endDate }}</td>
+                    <td class="cell td-font">{{ row.successReaction }}</td>
+                    <td class="cell td-font">{{ row.process }}</td>
+                    <td class="cell td-font">{{ row.status }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="flex items-center gap-2.5 h-14 border-b-2 border-gray-200">
+        <p class="td-font">1 items of 6</p>
+        <button class="flex gap-2.5 cursor-pointer">
+            <p class="text-accent font-normal">View all</p>
+            <img src="./assets/icons/little-arrow.svg" alt="view all">
+        </button>
+    </div>
+</div>
