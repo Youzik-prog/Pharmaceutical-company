@@ -38,8 +38,23 @@
                         </td>
                     }
                     
-                    <td class="cell td-font">{{ row.process }}</td>
-                    <td class="cell td-font">{{ row.status }}</td>
+                    <td class="cell td-font">
+                        <p>
+                            {{ `${row.process.current} / ${row.process.total}` }}
+                        </p>
+                        <div class="w-4/5 progress-bar">
+                            <div class="h-full bg-success transition-all duration-500" 
+                            [style.width.%]="progressPercentage(row.process.total, row.process.current)"></div>
+                        </div>
+                    </td>
+                    <td class="cell">
+                        <div class="flex gap-1 items-center w-4/5 h-full">
+                            <div class="progress-bar bg-accent" [style.width.%]="row.status.healthy"></div>
+                            <div class="progress-bar bg-fail" [style.width.%]="row.status.unhealthy"></div>
+                            <div class="progress-bar bg-amber-600" [style.width.%]="row.status.dangerous"></div>
+                            <div class="progress-bar bg-success" [style.width.%]="row.status.noEffect"></div>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

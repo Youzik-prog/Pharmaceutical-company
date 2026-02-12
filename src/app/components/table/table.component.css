@@ -13,4 +13,8 @@
     .td-font {
         @apply text-secondary;
     }
+
+    .progress-bar {
+        @apply h-1 bg-gray-200 overflow-hidden;
+    }
 }
