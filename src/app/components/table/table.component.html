@@ -21,9 +21,23 @@
                 <tr class="h-14 border-b-2 border-gray-200">
                     <td class="cell text-accent font-semibold">{{ row.name }}</td>
                     <td class="cell td-font">{{ row.location }}</td>
-                    <td class="cell td-font">{{ row.startDate }}</td>
-                    <td class="cell td-font">{{ row.endDate }}</td>
-                    <td class="cell td-font">{{ row.successReaction }}</td>
+                    <td class="cell td-font">{{ formatDate(row.startDate) }}</td>
+                    <td class="cell td-font">{{ formatDate(row.endDate) }}</td>
+                    @if(row.successReaction) {
+                        <td class="cell">
+                            <div class="center-container w-8 h-8 rounded-full bg-green-100">
+                                <img src="./assets/icons/success.svg" alt="success">
+                            </div>
+                        </td>
+                    }
+                    @else {
+                        <td class="cell">
+                            <div class="center-container w-8 h-8 rounded-full bg-red-100">
+                                <img src="./assets/icons/fail.svg" alt="fail">
+                            </div>
+                        </td>
+                    }
+                    
                     <td class="cell td-font">{{ row.process }}</td>
                     <td class="cell td-font">{{ row.status }}</td>
                 </tr>

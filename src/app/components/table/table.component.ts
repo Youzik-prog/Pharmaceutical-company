@@ -2,6 +2,7 @@ import { Component, effect, inject, signal, Signal } from '@angular/core';
 import { DrugsService } from "../../services/drugs.service";
 import { Drug } from 'src/app/types/types';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { formatDate } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-table',
@@ -13,5 +14,9 @@ export class TableComponent {
 
   private drugsService: DrugsService = inject(DrugsService);
 
+  public formatDate = formatDate;
+
   allDrugs: Signal<Drug[]> = toSignal(this.drugsService.getAllDrugs(), {initialValue: []});
+
+  
 }
