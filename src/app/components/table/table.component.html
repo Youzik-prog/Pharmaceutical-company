@@ -3,7 +3,7 @@
     <p class="page-description">Brief summary of testing processes</p>
 </div>
 <!-- Table -->
-<div class="w-full overflow-x-auto overflow-y-hidden">
+<div class="w-full mb-8 overflow-x-auto overflow-y-hidden">
     <table class="w-full border-collapse">
         <thead>
             <tr class="h-8 border-b-2 border-t-2 border-gray-200">
@@ -59,11 +59,13 @@
             }
         </tbody>
     </table>
-    <div class="flex items-center gap-2.5 h-14 border-b-2 border-gray-200">
-        <p class="td-font">1 items of 6</p>
-        <button class="flex gap-2.5 cursor-pointer">
-            <p class="text-accent font-normal">View all</p>
-            <img src="./assets/icons/little-arrow.svg" alt="view all">
-        </button>
-    </div>
+    @if(loadedDrugs() !== allDrugsAmount()) {
+        <div class="flex items-center gap-2.5 h-14 border-b-2 border-gray-200">
+            <p class="td-font">1 to {{ loadedDrugs() }} items of {{ allDrugsAmount() }}</p>
+            <button (click)="loadAllDrugs()" class="flex gap-2.5 cursor-pointer">
+                <p class="text-accent font-normal">View all</p>
+                <img src="./assets/icons/little-arrow.svg" alt="view all">
+            </button>
+        </div>
+    }
 </div>
