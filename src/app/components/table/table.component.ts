@@ -2,28 +2,28 @@ import { Component, effect, inject, signal, Signal, WritableSignal } from '@angu
 import { DrugsService } from "../../services/drugs.service";
 import { Drug } from 'src/app/types/types';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { formatDate, progressPercentage } from 'src/app/utils/functions';
 import { switchMap } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { ProgressPercentagePipe } from 'src/app/pipes/progress-percentage-pipe';
 
 @Component({
   selector: 'app-table',
-  imports: [],
+  imports: [DatePipe, ProgressPercentagePipe],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
+  standalone: true
 })
 export class TableComponent {
 
   private drugsService: DrugsService = inject(DrugsService);
 
-  public progressPercentage = progressPercentage;
+  private initLoadedDrugsAmount = 9;
 
-  public formatDate = formatDate;
-
-  loadedDrugs: WritableSignal<number> = signal(9); 
+  loadedDrugs: WritableSignal<number> = signal(this.initLoadedDrugsAmount); 
 
   allDrugs: Signal<Drug[]> = toSignal(
     toObservable(this.loadedDrugs).pipe(
-      switchMap(amount => this.drugsService.getAllDrugs(amount))
+      switchMap(amount => this.drugsService.getDrugs(amount))
     ),
     {initialValue: []}
   );

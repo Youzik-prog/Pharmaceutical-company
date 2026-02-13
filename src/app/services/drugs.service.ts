@@ -13,7 +13,10 @@ export class DrugsService {
 
   constructor(private http: HttpClient) { }
 
-  getAllDrugs(amount?: number): Observable<Drug[]> { 
+  /**
+   * @param amount - Необязательный параметр. Если он не указан, то вернётся весь список лекартсв.
+   */
+  getDrugs(amount?: number): Observable<Drug[]> { 
     return this.http.get<Drug[]>(this.apiUrl).pipe(
       map((drugs: Drug[]) => amount ? drugs.slice(0, amount) : drugs)
     );

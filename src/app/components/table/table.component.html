@@ -17,12 +17,12 @@
             </tr>
         </thead>
         <tbody>
-            @for (row of allDrugs(); track row) {
+            @for (row of allDrugs(); track row.id) {
                 <tr class="h-14 border-b-2 border-gray-200">
                     <td class="cell text-accent font-semibold">{{ row.name }}</td>
                     <td class="cell td-font">{{ row.location }}</td>
-                    <td class="cell td-font">{{ formatDate(row.startDate) }}</td>
-                    <td class="cell td-font">{{ formatDate(row.endDate) }}</td>
+                    <td class="cell td-font">{{ row.startDate | date:'mediumDate'}}</td>
+                    <td class="cell td-font">{{ row.endDate | date:'mediumDate'}}</td>
                     @if(row.successReaction) {
                         <td class="cell">
                             <div class="center-container w-8 h-8 rounded-full bg-green-100">
@@ -44,7 +44,7 @@
                         </p>
                         <div class="w-4/5 progress-bar">
                             <div class="h-full bg-success transition-all duration-500" 
-                            [style.width.%]="progressPercentage(row.process.total, row.process.current)"></div>
+                            [style.width.%]="row.process.current | progressPercentage:row.process.total"></div>
                         </div>
                     </td>
                     <td class="cell">
@@ -59,9 +59,12 @@
             }
         </tbody>
     </table>
-    @if(loadedDrugs() !== allDrugsAmount()) {
+    @let loaded = loadedDrugs();
+    @let all = allDrugsAmount();
+
+    @if(loaded !== all) {
         <div class="flex items-center gap-2.5 h-14 border-b-2 border-gray-200">
-            <p class="td-font">1 to {{ loadedDrugs() }} items of {{ allDrugsAmount() }}</p>
+            <p class="td-font">1 to {{ loaded }} items of {{ all }}</p>
             <button (click)="loadAllDrugs()" class="flex gap-2.5 cursor-pointer">
                 <p class="text-accent font-normal">View all</p>
                 <img src="./assets/icons/little-arrow.svg" alt="view all">
