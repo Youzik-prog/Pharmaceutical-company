@@ -48,11 +48,8 @@
                         </div>
                     </td>
                     <td class="cell">
-                        <div class="flex gap-1 items-center w-4/5 h-full">
-                            <div class="progress-bar bg-accent" [style.width.%]="row.status.healthy"></div>
-                            <div class="progress-bar bg-fail" [style.width.%]="row.status.unhealthy"></div>
-                            <div class="progress-bar bg-amber-600" [style.width.%]="row.status.dangerous"></div>
-                            <div class="progress-bar bg-success" [style.width.%]="row.status.noEffect"></div>
+                        <div class="flex items-end h-6s">
+                            <div [appMultiProgress]="row.status" class="w-4/5 h-1"></div>
                         </div>
                     </td>
                 </tr>

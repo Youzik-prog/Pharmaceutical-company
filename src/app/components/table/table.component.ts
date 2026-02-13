@@ -5,10 +5,11 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { ProgressPercentagePipe } from 'src/app/pipes/progress-percentage-pipe';
+import { MultiProgressDirective } from 'src/app/directives/multi-progress.directive';
 
 @Component({
   selector: 'app-table',
-  imports: [DatePipe, ProgressPercentagePipe],
+  imports: [DatePipe, ProgressPercentagePipe, MultiProgressDirective],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
   standalone: true
