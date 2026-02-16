@@ -8,15 +8,36 @@
 @theme {
     --color-primary: #141828;
     --color-secondary: #56627D;
+    --color-accent: #3874FF;
+    --color-success: #25b003;
+    --color-fail: #ED2000;
     --color-background: #f5f7fa;
 
     --font-sans: "Inter";
 
+}
 
+@layer base {
+    body {
+        @apply font-medium text-primary text-sm;
+    }
 }
 
 @layer components {
+
+    .center-container {
+        @apply flex justify-center items-center;
+    }
+
     .component-container {
-        @apply pl-6 pr-6;
+        @apply pl-6 pr-6 pt-8;
+    }
+
+    .page-name {
+        @apply text-primary text-2xl font-semibold;
+    }
+
+    .page-description {
+        @apply text-secondary font-medium;
     }
 }

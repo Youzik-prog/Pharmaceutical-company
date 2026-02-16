@@ -1,0 +1,20 @@
+@import "./../../../styles.css";
+
+@layer components {
+
+    .cell {
+        @apply pr-3;
+    }
+
+    .th {
+        @apply font-medium text-left;
+    }
+
+    .td-font {
+        @apply text-secondary;
+    }
+
+    .progress-bar {
+        @apply h-1 bg-gray-200 overflow-hidden;
+    }
+}
