@@ -12,6 +12,7 @@
     --color-success: #25b003;
     --color-fail: #ED2000;
     --color-background: #f5f7fa;
+    --color-border: var(--color-gray-200);
 
     --font-sans: "Inter";
 
@@ -20,6 +21,10 @@
 @layer base {
     body {
         @apply font-medium text-primary text-sm;
+    }
+
+    select {
+        @apply w-56 h-8 pl-2.5 pr-2.5 font-medium text-sm text-secondary border-2 border-border rounded-md;
     }
 }
 

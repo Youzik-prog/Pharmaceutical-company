@@ -16,3 +16,19 @@ export interface Drug {
         noEffect: number;
     }
 }
+
+export interface Test {
+    date: string,
+    tests: number,
+    completed: number,
+    approves: number,
+    people: {
+        amount: number,
+        tested: number
+    },
+    testingProcess: {
+        preclinicalTesting: number,
+        clinicalTrials: number,
+        regulatoryApproval: number
+    }
+}
