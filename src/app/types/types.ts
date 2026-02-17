@@ -32,3 +32,10 @@ export interface Test {
         regulatoryApproval: number
     }
 }
+
+export interface Stat {
+    startDate: Date,
+    endDate: Date,
+    dataset: number[],
+    dataset2?: number[]
+}

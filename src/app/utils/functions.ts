@@ -1,0 +1,24 @@
+export function generateDateRange(startDate: Date, endDate: Date): Date[] {
+  const dates: Date[] = [];
+
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
+
+export function formatChartDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  
+  return `${day} ${month}`;
+}
+
+export function getSCCPropertyValue(property: string): string {
+    const style = getComputedStyle(document.documentElement);
+    return style.getPropertyValue(property).trim();
+}

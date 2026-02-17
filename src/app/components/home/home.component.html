@@ -30,7 +30,7 @@
         </div>
         <!-- Total tests -->
         <div>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center mb-10">
                 <div>
                     <h2 class="font-semibold text-xl">Total tests</h2>
                     <p class="text-secondary">Testing results received in all areas</p>
@@ -39,12 +39,12 @@
                     <option value="">Feb 1 - 28, 2026</option>
                 </select>
             </div>
-            <div>
-                DIAGRAM
+            <div class="">
+                <canvas #testsChart class="h-full"></canvas>
             </div>
         </div>
     </div>
     <div>
-        CARDS
+        <app-diagram-card></app-diagram-card>
     </div>
 </div>
