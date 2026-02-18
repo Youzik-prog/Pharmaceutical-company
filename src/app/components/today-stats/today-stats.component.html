@@ -1,0 +1,23 @@
+<div class="flex gap-11 w-full h-20 border-b-2 border-border">
+    <div class="stats-item">
+        <img src="./assets/icons/stats-medicine.svg" alt="medicine stat" class="image">
+        <div class="text">
+            <h3 class="label">{{ closestNonExpiredDrug()?.name ?? '-' }}</h3>
+            <p class="description">Awaiting results</p>
+        </div>
+    </div>
+    <div class="stats-item">
+        <img src="./assets/icons/stats-vaccines.svg" alt="vaccines stat" class="image">
+        <div class="text">
+            <h3 class="label">{{ vaccinesOnHold() ?? '-' }}</h3>
+            <p class="description">On hold</p>
+        </div>
+    </div>
+    <div class="stats-item">
+        <img src="./assets/icons/stats-products.svg" alt="products stat" class="image">
+        <div class="text">
+            <h3 class="label">{{ productsOutOfStock() ?? '-' }}</h3>
+            <p class="description">Out of stock</p>
+        </div>
+    </div>
+</div>

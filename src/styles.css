@@ -24,7 +24,7 @@
     }
 
     select {
-        @apply w-56 h-8 pl-2.5 pr-2.5 font-medium text-sm text-secondary border-2 border-border rounded-md;
+        @apply w-56 h-8 pl-2.5 pr-2.5 font-medium text-sm text-secondary border-2 border-border rounded-md cursor-pointer;
     }
 }
 

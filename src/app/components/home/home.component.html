@@ -5,53 +5,12 @@
 <div class="flex gap-6">
     <div class="flex flex-col gap-10">
         <!-- Main stats -->
-        <div class="flex gap-11 w-full h-20 border-b-2 border-border">
-            <div class="stats-item">
-                <img src="./assets/icons/stats-medicine.svg" alt="medicine stat" class="image">
-                <div class="text">
-                    <h3 class="label">{{ closestNonExpiredDrug()?.name ?? '-' }}</h3>
-                    <p class="description">Awaiting results</p>
-                </div>
-            </div>
-            <div class="stats-item">
-                <img src="./assets/icons/stats-vaccines.svg" alt="vaccines stat" class="image">
-                <div class="text">
-                    <h3 class="label">{{ vaccinesOnHold() ?? '-' }}</h3>
-                    <p class="description">On hold</p>
-                </div>
-            </div>
-            <div class="stats-item">
-                <img src="./assets/icons/stats-products.svg" alt="products stat" class="image">
-                <div class="text">
-                    <h3 class="label">{{ productsOutOfStock() ?? '-' }}</h3>
-                    <p class="description">Out of stock</p>
-                </div>
-            </div>
+        <div class="">
+            <app-today-stats></app-today-stats>
         </div>
         <!-- Total tests -->
         <div>
-            <div class="flex justify-between items-center mb-10">
-                <div>
-                    <h2 class="font-semibold text-xl">Total tests</h2>
-                    <p class="text-secondary">Testing results received in all areas</p>
-                </div>
-                <select 
-                [value]="daysRange()"
-                (change)="onRangeChange($event)"
-                name="date-from" 
-                id="date-from">
-
-                @let currentDay = currentDate().getDate();
-                @let currentYear = currentDate().getFullYear();
-
-                    <option value="7">{{ currentDate() | substractDate: 7 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-                    <option value="14">{{ currentDate() | substractDate: 14 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-                    <option value="28">{{ currentDate() | substractDate: 28 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-                </select>
-            </div>
-            <div class="">
-                <canvas #testsChart class="h-full"></canvas>
-            </div>
+            <app-total-tests-diagram></app-total-tests-diagram>
         </div>
     </div>
     <div>
