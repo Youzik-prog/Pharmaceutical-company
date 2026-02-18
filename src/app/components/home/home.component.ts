@@ -1,15 +1,22 @@
-import { Component, effect, ElementRef, inject, input, viewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, signal, Signal, viewChild, WritableSignal } from '@angular/core';
 import { DiagramCardComponent } from "../diagram-card/diagram-card.component";
 import { Chart, registerables } from 'chart.js';
 import { TestsService } from 'src/app/services/tests.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { formatChartDate, generateDateRange, getSCCPropertyValue } from 'src/app/utils/functions';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { formatChartDate, generateDateRange, getSCCPropertyValue, substractDaysFromDate } from 'src/app/utils/functions';
+import { CURRENT_DATE } from 'src/app/constants/mainContants';
+import { Stat } from 'src/app/types/types';
+import { switchMap } from 'rxjs';
+import { SubstractDatePipe } from 'src/app/pipes/substract-date-pipe';
+import { DatePipe } from '@angular/common';
 
 Chart.register(...registerables);
 
+const initDaysRange = 7;
+
 @Component({
   selector: 'app-home',
-  imports: [DiagramCardComponent],
+  imports: [DiagramCardComponent, SubstractDatePipe, DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -21,31 +28,58 @@ export class HomeComponent {
 
   private chart?: Chart;
 
+  daysRange: WritableSignal<number> = signal(initDaysRange);
+
+  currentDate = signal(CURRENT_DATE);
+
+  startDate: Signal<Date> = computed(() => substractDaysFromDate(this.currentDate(), this.daysRange()));
+
+  private params$ = toObservable(computed(() => ({
+    start: this.startDate(),
+    end: this.currentDate(),
+  })));
+
+  chartData = toSignal(
+    this.params$.pipe(
+      switchMap(params => this.testsService.getTotalTestedDrugsStat(params.start, params.end))
+    )
+  );
+
   constructor() {
-    this.drawTotalTestsChart();
+    effect(() => {
+      const data = this.chartData();
+      if (!data) return;
 
-
+      this.drawTotalTestsChart(data);
+    });
   }
 
-  drawTotalTestsChart() {
-    const data = toSignal(this.testsService.getTotalTestedDrugsStat(new Date('2026-02-01'), new Date('2026-02-28')));
+  onRangeChange(event: Event) {
+    if(!event.target)
+      return;
 
-    effect(() => {
+    const select = event.target as HTMLSelectElement;
 
-      if(!data())
-        return;
+    this.daysRange.set(+select.value);
+  }
 
-      const el = this.canvas().nativeElement;
+  drawTotalTestsChart(data: Stat) {
+    const el = this.canvas().nativeElement;
 
-      const {startDate, endDate, dataset, dataset2} = data()!;
+    const {startDate, endDate, dataset, dataset2} = data;
 
-      const labels = generateDateRange(startDate, endDate).map(date => formatChartDate(date));
+    const labels = generateDateRange(startDate, endDate).map(date => formatChartDate(date));
 
-      // styles
-      const accentColor = getSCCPropertyValue('--color-accent');
+    // styles
+    const accentColor = getSCCPropertyValue('--color-accent');
 
-      if(this.chart)
-        this.chart.destroy();
+    if(this.chart) {
+      this.chart.data.labels = labels;
+      this.chart.data.datasets[0].data = dataset;
+      this.chart.data.datasets[1].data = dataset2 ?? [];
+
+      this.chart.update();
+    } else {
 
       this.chart = new Chart(el, {
         type: 'line',
@@ -70,6 +104,10 @@ export class HomeComponent {
           ]
         },
         options: {
+          animation: {
+            duration: 750,
+            easing: 'easeInOutQuint',
+          },
           scales: {
             x: {
               grid: {
@@ -77,7 +115,7 @@ export class HomeComponent {
                 drawOnChartArea: true,
               },
               ticks: {
-                callback: function(val, index) {
+                callback: function(_, index) {
                   if(index === 0 || index === Math.floor(labels.length / 2) || index === labels.length - 1) {
                     return labels[index];
                   }
@@ -107,7 +145,7 @@ export class HomeComponent {
           }
         }
       });
-    });
+    }
   }
 
 }

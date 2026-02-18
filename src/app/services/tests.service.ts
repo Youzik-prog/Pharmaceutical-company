@@ -3,6 +3,7 @@ import { TESTS_API_URL } from '../constants/mainContants';
 import { HttpClient } from '@angular/common/http';
 import { filter, map, Observable } from 'rxjs';
 import { Stat, Test } from '../types/types';
+import { substractDaysFromDate } from '../utils/functions';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class TestsService {
     return this.http.get<Test[]>(this.apiUrl).pipe(
       map(tests => tests.filter(test => {
         const date = new Date(test.date);
-        return date >= from && date <= to
+        return date >= from && date < to
       }))
     );
   }
@@ -35,7 +36,7 @@ export class TestsService {
 
         return {
           startDate: from,
-          endDate: to,
+          endDate: substractDaysFromDate(to, 1),
           dataset: totalTests,
           dataset2: totalCompletedTests
         }

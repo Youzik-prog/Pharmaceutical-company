@@ -11,6 +11,15 @@ export function generateDateRange(startDate: Date, endDate: Date): Date[] {
   return dates;
 }
 
+export function substractDaysFromDate(date: Date, days: number): Date {
+  
+  const result = new Date(date);
+
+  result.setDate(date.getDate() - days);
+
+  return result;
+}
+
 export function formatChartDate(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   const month = date.toLocaleString('en-US', { month: 'short' });
