@@ -9,21 +9,21 @@
             <div class="stats-item">
                 <img src="./assets/icons/stats-medicine.svg" alt="medicine stat" class="image">
                 <div class="text">
-                    <h3 class="label">Medicine #580</h3>
+                    <h3 class="label">{{ closestNonExpiredDrug()?.name ?? '-' }}</h3>
                     <p class="description">Awaiting results</p>
                 </div>
             </div>
             <div class="stats-item">
                 <img src="./assets/icons/stats-vaccines.svg" alt="vaccines stat" class="image">
                 <div class="text">
-                    <h3 class="label">3 vaccines</h3>
+                    <h3 class="label">{{ vaccinesOnHold() ?? '-' }}</h3>
                     <p class="description">On hold</p>
                 </div>
             </div>
             <div class="stats-item">
                 <img src="./assets/icons/stats-products.svg" alt="products stat" class="image">
                 <div class="text">
-                    <h3 class="label">15 products</h3>
+                    <h3 class="label">{{ productsOutOfStock() ?? '-' }}</h3>
                     <p class="description">Out of stock</p>
                 </div>
             </div>

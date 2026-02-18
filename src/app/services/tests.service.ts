@@ -27,6 +27,14 @@ export class TestsService {
     );
   }
 
+  getTestByDay(day: Date): Observable<Test | undefined> {
+    return this.http.get<Test[]>(this.apiUrl).pipe(
+      map((tests: Test[]) =>
+        tests.find(test => new Date(test.date).getTime() === day.getTime())
+      )
+    );
+  }
+
   getTotalTestedDrugsStat(from: Date, to: Date): Observable<Stat> {
     return this.getPeriodTests(from, to).pipe(
       map(tests => {

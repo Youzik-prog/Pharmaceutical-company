@@ -5,10 +5,11 @@ import { TestsService } from 'src/app/services/tests.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { formatChartDate, generateDateRange, getSCCPropertyValue, substractDaysFromDate } from 'src/app/utils/functions';
 import { CURRENT_DATE } from 'src/app/constants/mainContants';
-import { Stat } from 'src/app/types/types';
-import { switchMap } from 'rxjs';
+import { Drug, Stat } from 'src/app/types/types';
+import { map, switchMap } from 'rxjs';
 import { SubstractDatePipe } from 'src/app/pipes/substract-date-pipe';
 import { DatePipe } from '@angular/common';
+import { DrugsService } from 'src/app/services/drugs.service';
 
 Chart.register(...registerables);
 
@@ -23,6 +24,8 @@ const initDaysRange = 7;
 export class HomeComponent {
 
   testsService = inject(TestsService);
+
+  drugsService = inject(DrugsService);
 
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('testsChart');
 
@@ -44,6 +47,31 @@ export class HomeComponent {
       switchMap(params => this.testsService.getTotalTestedDrugsStat(params.start, params.end))
     )
   );
+
+  closestNonExpiredDrug: Signal<Drug | undefined> = toSignal(this.drugsService.getNonExpiredDrugs(this.currentDate())
+  .pipe(map(drugs => drugs[0])));
+
+  vaccinesOnHold: Signal<number | undefined> = toSignal(
+    this.testsService.getTestByDay(this.currentDate()).pipe(
+      map(test => {
+        if(!test)
+          return undefined;
+
+        return test.tests - test.completed;
+      })
+    )
+  )
+
+  productsOutOfStock: Signal<number | undefined> = toSignal(
+    this.testsService.getTestByDay(this.currentDate()).pipe(
+      map(test => {
+        if(!test)
+          return undefined;
+
+        return test.completed - test.approves;
+      })
+    )
+  )
 
   constructor() {
     effect(() => {
