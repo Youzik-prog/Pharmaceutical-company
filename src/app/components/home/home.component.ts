@@ -1,5 +1,5 @@
 import { Component, computed, effect, ElementRef, inject, input, signal, Signal, viewChild, WritableSignal } from '@angular/core';
-import { DiagramCardComponent } from "../diagram-card/diagram-card.component";
+import { DiagramCardComponent } from "../diagram-cards/diagram-card/diagram-card.component";
 import { Chart, registerables } from 'chart.js';
 import { TestsService } from 'src/app/services/tests.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
