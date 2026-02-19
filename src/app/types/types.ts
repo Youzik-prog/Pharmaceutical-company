@@ -39,3 +39,12 @@ export interface Stat {
     dataset: number[],
     dataset2?: number[]
 }
+
+export type Values = {name: string, value: number};
+export type TotalValue = {currentValue: number, pastValue?: number};
+
+export interface DiagramCard {
+    title: string,
+    titleValue: TotalValue,
+    values?: Values[];
+}
