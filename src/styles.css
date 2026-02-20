@@ -48,4 +48,9 @@
     .page-description {
         @apply text-secondary font-medium;
     }
+
+    .diagram {
+        max-width: 100%;
+        max-height: 100%;
+    }
 }
