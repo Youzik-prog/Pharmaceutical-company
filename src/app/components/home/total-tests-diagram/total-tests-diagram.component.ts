@@ -3,6 +3,7 @@ import { Component, computed, effect, ElementRef, inject, Signal, signal, viewCh
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Chart, registerables } from 'chart.js';
 import { switchMap } from 'rxjs';
+import { COLOR_ACCENT } from 'src/app/constants/colors';
 import { CURRENT_DATE } from 'src/app/constants/mainContants';
 import { SubstractDatePipe } from 'src/app/pipes/substract-date-pipe';
 import { TestsService } from 'src/app/services/tests.service';
@@ -69,9 +70,6 @@ export class TotalTestsDiagramComponent {
 
     const labels = generateDateRange(startDate, endDate).map(date => formatChartDate(date));
 
-    // styles
-    const accentColor = getSCCPropertyValue('--color-accent');
-
     if(this.chart) {
       this.chart.data.labels = labels;
       this.chart.data.datasets[0].data = dataset;
@@ -88,7 +86,7 @@ export class TotalTestsDiagramComponent {
             {
               label: 'Total Tests',
               data: dataset,
-              borderColor: accentColor,
+              borderColor: COLOR_ACCENT,
               borderWidth: 2,
               pointRadius: 0,
             },
@@ -115,8 +113,11 @@ export class TotalTestsDiagramComponent {
               },
               ticks: {
                 callback: function(_, index) {
-                  if(index === 0 || index === Math.floor(labels.length / 2) || index === labels.length - 1) {
-                    return labels[index];
+                  
+                  const currentLabels = this.chart.data.labels as string[];
+
+                  if(index === 0 || index === Math.floor(currentLabels.length / 2) || index === currentLabels.length - 1) {
+                    return currentLabels[index];
                   }
                   return '';
                 },
