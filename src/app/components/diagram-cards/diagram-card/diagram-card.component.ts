@@ -1,8 +1,7 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, input, Signal } from '@angular/core';
-
-type Values = {name: string, value: number};
-type TotalValue = {currentValue: number, pastValue?: number};
+import { AfterContentInit, AfterViewInit, Component, computed, ContentChild, Input, input, signal, Signal, WritableSignal } from '@angular/core';
+import { COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3 } from 'src/app/constants/colors';
+import { DiagramCard, TotalValue, Values } from 'src/app/types/types';
 
 @Component({
   selector: 'app-diagram-card',
@@ -10,26 +9,41 @@ type TotalValue = {currentValue: number, pastValue?: number};
   templateUrl: './diagram-card.component.html',
   styleUrl: './diagram-card.component.css',
 })
-export class DiagramCardComponent {
+export class DiagramCardComponent implements AfterContentInit {
+  
+  @ContentChild(DiagramCard) child!: DiagramCard; 
+  
+  title = computed<string>(() => this.child.title());
 
-  totalValue = input<TotalValue, TotalValue>(undefined, {
-    transform: (value: TotalValue) => {
-      if(value.pastValue) {
-        return {currentValue: value.currentValue, pastValue: ((value.currentValue / value.pastValue) - 1) * 100}
-      } else
-        return value;
+  totalValue = computed<TotalValue | undefined>(() => {
+    if(!this.child || !this.child.totalValue) return;
+
+    const totalValue = this.child.totalValue();
+
+    return {
+      currentValue: totalValue.currentValue,
+      pastValue: totalValue.pastValue ? (totalValue.currentValue / totalValue.pastValue) - 1 : undefined, 
     }
   });
 
-  values = input<Values[], Values[]>([], {
-    transform: (rawValues: Values[]) => {
+  values = computed<Values[] | undefined>(() => {
 
-      const sum = rawValues.reduce((acc, value) => acc + value.value, 0);
+    if(!this.child || !this.child.values) return;
+    
+    const values = this.child.values();
 
-      return rawValues.map(value => (
-        {name: value.name, 
-          value: value.value / sum * 100}));
-    }
-  });
+    const sum = values.reduce((acc, el) => acc + el.value, 0);
+
+    return values.map(el => ({
+      name: el.name,
+      value: el.value / sum * 100
+    }))
+  })
+      
+  ngAfterContentInit() {
+    
+  }
+
+  valuesColors = [COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3];
 
 }

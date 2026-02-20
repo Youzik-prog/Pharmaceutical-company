@@ -14,6 +14,9 @@
     --color-background: #f5f7fa;
     --color-border: var(--color-gray-200);
 
+    --color-accent-2: #E5EDFF;
+    --color-accent-3: #0080C7;
+
     --font-sans: "Inter";
 
 }

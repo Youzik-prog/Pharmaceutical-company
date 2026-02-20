@@ -10,12 +10,13 @@ import { map, switchMap } from 'rxjs';
 import { SubstractDatePipe } from 'src/app/pipes/substract-date-pipe';
 import { DatePipe } from '@angular/common';
 import { DrugsService } from 'src/app/services/drugs.service';
-import { TotalTestsDiagramComponent } from "../total-tests-diagram/total-tests-diagram.component";
-import { TodayStatsComponent } from "../today-stats/today-stats.component";
+import { TotalTestsDiagramComponent } from "./total-tests-diagram/total-tests-diagram.component";
+import { TodayStatsComponent } from "./today-stats/today-stats.component";
+import { TotalTestedDrugsComponent } from "../diagram-cards/total-tested-drugs/total-tested-drugs.component";
 
 @Component({
   selector: 'app-home',
-  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent],
+  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent, TotalTestedDrugsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

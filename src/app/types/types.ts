@@ -1,3 +1,5 @@
+import { Signal, WritableSignal } from "@angular/core";
+
 export interface Drug {
     id: number;
     name: string;
@@ -40,11 +42,11 @@ export interface Stat {
     dataset2?: number[]
 }
 
-export type Values = {name: string, value: number};
 export type TotalValue = {currentValue: number, pastValue?: number};
+export type Values = {name: string, value: number};
 
-export interface DiagramCard {
-    title: string,
-    titleValue: TotalValue,
-    values?: Values[];
+export abstract class DiagramCard {
+    abstract title: Signal<string>;
+    abstract totalValue?: Signal<TotalValue>;
+    abstract values?: Signal<Values[]>;
 }
