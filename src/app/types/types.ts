@@ -1,6 +1,7 @@
-import { input, InputSignal, Signal, WritableSignal } from "@angular/core";
+import { computed, Directive, effect, ElementRef, input, InputSignal, Signal, WritableSignal } from "@angular/core";
 import { Chart } from "chart.js";
-import { CURRENT_DATE } from "../constants/mainContants";
+import { CURRENT_DATE, SHOW_LAST_DAYS } from "../constants/mainContants";
+import { substractDaysFromDate } from "../utils/functions";
 
 export interface Drug {
     id: number;
@@ -47,9 +48,37 @@ export interface Stat {
 export type TotalValue = {currentValue: number, pastValue?: number};
 export type Values = {name: string, value: number};
 
+@Directive()
 export abstract class DiagramCard {
     abstract title: Signal<string>;
-    abstract showLastDays: InputSignal<number>;
     abstract totalValue?: Signal<TotalValue>;
     abstract values?: Signal<Values[]>;
+    
+    protected abstract chart?: Chart;
+
+    protected abstract canvas: Signal<ElementRef<HTMLCanvasElement>>;
+
+    abstract chartData: Signal<Stat | undefined>;
+
+
+    showLastDays = input<number>(SHOW_LAST_DAYS);
+    
+    currentDate = input(CURRENT_DATE);
+    
+    startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
+
+    constructor() {
+
+        effect(() => {
+        const data = this.chartData();
+        const element = this.canvas().nativeElement;
+        if (!data) return;
+        
+        this.drawChart(element, data);
+        });
+    }
+
+    abstract drawChart(element: HTMLCanvasElement, data: Stat): void;
+
+    abstract createChart(element: HTMLCanvasElement, labels: string[], startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined): void
 }

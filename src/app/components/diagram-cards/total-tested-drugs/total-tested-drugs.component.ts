@@ -15,19 +15,13 @@ import { substractDaysBetweenTwoDates, substractDaysFromDate } from 'src/app/uti
   styleUrl: './total-tested-drugs.component.css',
   providers: [{provide: DiagramCard, useExisting: TotalTestedDrugsComponent}]
 })
-export class TotalTestedDrugsComponent implements DiagramCard  {
+export class TotalTestedDrugsComponent extends DiagramCard  {
 
   private readonly testsService = inject(TestsService);
 
-  showLastDays = input<number>(SHOW_LAST_DAYS);
-  
-  currentDate = input(CURRENT_DATE);
-  
-  startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
+  protected chart?: Chart;
 
-  private chart?: Chart;
-
-  canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('totalTestedChart');
+  protected canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('totalTestedChart');
   
   chartData = toSignal(
     combineLatest([
@@ -87,33 +81,29 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
   });
 
   constructor() {
-    effect(() => {
-      const data = this.chartData();
-      if (!data) return;
-
-      this.drawChart(data);
-    });
+    super();
   }
 
-  drawChart(data: Stat) {
-    const el = this.canvas().nativeElement;
+  drawChart(element: HTMLCanvasElement, data: Stat) {
 
-    const {startDate, endDate, dataset, dataset2} = data;
+      const {startDate, endDate, dataset, dataset2} = data;
 
-    if(this.chart) {  
+      const labels = dataset.map(() => '');
+
+      if(this.chart) {  
 
       this.chart.data.datasets[0].data = dataset2 ?? [];
       this.chart.data.datasets[1].data = dataset;
-      this.chart.data.labels = dataset.map(() => '');
+      this.chart.data.labels = labels
       
       this.chart.update();
 
-    } else {
-      this.createChart(el, dataset, dataset2);
-    }
+      } else {
+      this.createChart(element, labels, startDate, endDate, dataset, dataset2);
+      }
   }
 
-  private createChart(element: HTMLCanvasElement, dataset: number[], dataset2: number[] | undefined): void {
+  createChart(element: HTMLCanvasElement, labels: string[], startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined): void {
     this.chart = new Chart(element, {
       type: 'bar',
       data: {

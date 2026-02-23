@@ -75,11 +75,11 @@ export class TotalTestsDiagramComponent {
 
       this.chart.update();
     } else {
-      this.createChart(el, startDate, endDate, dataset, dataset2, labels);
+      this.createChart(el, labels, startDate, endDate, dataset, dataset2);
     }
   }
 
-  private createChart(element: HTMLCanvasElement, startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined, labels: string[]): void {
+  private createChart(element: HTMLCanvasElement, labels: string[], startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined): void {
     this.chart = new Chart(element, {
       type: 'line',
       data: {

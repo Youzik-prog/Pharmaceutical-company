@@ -52,4 +52,21 @@ export class TestsService {
     )
   }
 
+  getDrugApprovalRates(from: Date, to: Date): Observable<Stat> {
+    return this.getPeriodTests(from, to).pipe(
+      map(tests => {
+        const completedTests = tests.map(test => test.completed);
+
+        const approvedTests = tests.map(test => test.approves);
+
+        return {
+          startDate: from,
+          endDate: substractDaysFromDate(to, 1),
+          dataset: completedTests,
+          dataset2: approvedTests
+        }
+      })
+    )
+  }
+
 }
