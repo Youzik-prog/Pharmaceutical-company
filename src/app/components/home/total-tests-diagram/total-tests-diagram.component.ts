@@ -10,8 +10,6 @@ import { TestsService } from 'src/app/services/tests.service';
 import { Stat } from 'src/app/types/types';
 import { formatChartDate, generateDateRange, getSCCPropertyValue, substractDaysFromDate } from 'src/app/utils/functions';
 
-Chart.register(...registerables);
-
 const initDaysRange = 7;
 
 @Component({

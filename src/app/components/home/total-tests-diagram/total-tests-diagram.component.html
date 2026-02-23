@@ -9,12 +9,13 @@
     name="date-from" 
     id="date-from">
 
-    @let currentDay = currentDate().getDate();
-    @let currentYear = currentDate().getFullYear();
+    @let current = currentDate();
+    @let currentDay = current.getDate();
+    @let currentYear = current.getFullYear();
 
-        <option value="7">{{ currentDate() | substractDate: 7 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-        <option value="14">{{ currentDate() | substractDate: 14 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-        <option value="28">{{ currentDate() | substractDate: 28 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
+        <option value="7">{{ current | substractDate: 7 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
+        <option value="14">{{ current | substractDate: 14 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
+        <option value="28">{{ current | substractDate: 28 | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
     </select>
 </div>
 <div class="w-full h-full">

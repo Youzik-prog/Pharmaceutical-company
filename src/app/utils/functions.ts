@@ -20,6 +20,14 @@ export function substractDaysFromDate(date: Date, days: number): Date {
   return result;
 }
 
+export function substractDaysBetweenTwoDates(date1: Date, date2: Date): number {
+  const msPerDay = 86_400_400;
+
+  const datesDifference = Math.abs(date1.getTime() - date2.getTime());
+
+  return Math.floor(datesDifference / msPerDay);
+}
+
 export function formatChartDate(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   const month = date.toLocaleString('en-US', { month: 'short' });

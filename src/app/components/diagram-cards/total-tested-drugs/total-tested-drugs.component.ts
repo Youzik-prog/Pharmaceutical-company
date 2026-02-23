@@ -1,16 +1,12 @@
 import { Component, computed, effect, ElementRef, inject, input, Signal, signal, viewChild } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Chart, Legend, registerables } from 'chart.js';
-import { map } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Chart, registerables } from 'chart.js';
+import { map, switchMap, tap } from 'rxjs';
 import { COLOR_ACCENT, COLOR_ACCENT_2 } from 'src/app/constants/colors';
-import { CURRENT_DATE } from 'src/app/constants/mainContants';
+import { CURRENT_DATE, SHOW_LAST_DAYS } from 'src/app/constants/mainContants';
 import { TestsService } from 'src/app/services/tests.service';
 import { DiagramCard, Stat, TotalValue, Values } from 'src/app/types/types';
-import { substractDaysFromDate } from 'src/app/utils/functions';
-
-Chart.register(...registerables);
-
-const showLastDays = 7;
+import { substractDaysBetweenTwoDates, substractDaysFromDate } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-total-tested-drugs',
@@ -21,9 +17,12 @@ const showLastDays = 7;
 })
 export class TotalTestedDrugsComponent implements DiagramCard  {
 
+  showLastDays = input<number>(SHOW_LAST_DAYS);
+  
   currentDate = input(CURRENT_DATE);
-
-  startDate = input<Date>(substractDaysFromDate(this.currentDate(), showLastDays));
+  
+  startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
+  
 
   private readonly testsService = inject(TestsService);
 
@@ -32,23 +31,28 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('totalTestedChart');
   
   chartData = toSignal(
-    this.testsService.getTotalTestedDrugsStat(this.startDate(), this.currentDate())
+    toObservable(this.startDate).pipe(
+      switchMap(start => this.testsService.getTotalTestedDrugsStat(start, this.currentDate()))
+    )
   );
   
-  totalTestedDrugsSum = toSignal(
-    this.testsService.getTotalTestedDrugsStat(this.startDate(), this.currentDate()).pipe(
-      map(stat => stat.dataset.reduce((acc, el) => acc + el, 0))
-    )
-  )
+  totalTestedDrugsSum = computed(() => 
+    this.chartData()?.dataset.reduce((acc, el) => acc + el, 0) ?? 0
+  );
 
-  totalCompletedDrugsSum = toSignal(
-    this.testsService.getTotalTestedDrugsStat(this.startDate(), this.currentDate()).pipe(
-      map(stat => stat.dataset2 ? stat.dataset2.reduce((acc, el) => acc + el, 0) : undefined)
-    )
+  totalCompletedDrugsSum = computed(() => 
+    this.chartData()?.dataset2?.reduce((acc, el) => acc + el, 0)
   );
 
   totalPastTestedDrugsSum = toSignal(
-    this.testsService.getTotalTestedDrugsStat(substractDaysFromDate(this.startDate(), showLastDays), this.currentDate()).pipe(
+    toObservable(this.startDate).pipe(
+      switchMap(start => this.testsService.getTotalTestedDrugsStat(
+        substractDaysFromDate(
+          start, 
+          substractDaysBetweenTwoDates(this.currentDate(), start)), 
+        this.currentDate()
+        )
+      ),
       map(stat => stat.dataset.reduce((acc, el) => acc + el, 0))
     )
   )
@@ -91,8 +95,14 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
 
     const {startDate, endDate, dataset, dataset2} = data;
 
-    if(this.chart) {
-      this.chart.destroy();
+    if(this.chart) {  
+
+      this.chart.data.datasets[0].data = dataset2 ?? [];
+      this.chart.data.datasets[1].data = dataset;
+      this.chart.data.labels = dataset.map(() => '');
+      
+      this.chart.update();
+
     } else {
       this.chart = new Chart(el, {
         type: 'bar',

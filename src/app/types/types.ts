@@ -49,4 +49,5 @@ export abstract class DiagramCard {
     abstract title: Signal<string>;
     abstract totalValue?: Signal<TotalValue>;
     abstract values?: Signal<Values[]>;
+    abstract showLastDays: Signal<number>;
 }

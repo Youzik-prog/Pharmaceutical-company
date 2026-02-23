@@ -22,5 +22,5 @@ import { TotalTestedDrugsComponent } from "../diagram-cards/total-tested-drugs/t
 })
 export class HomeComponent {
 
-  
+  date = new Date('2026-02-12');
 }

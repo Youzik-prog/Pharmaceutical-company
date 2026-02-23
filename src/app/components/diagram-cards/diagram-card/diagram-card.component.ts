@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, computed, ContentChild, Input, input, signal, Signal, WritableSignal } from '@angular/core';
+import { Component, computed, contentChild, ContentChild } from '@angular/core';
 import { COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3 } from 'src/app/constants/colors';
 import { DiagramCard, TotalValue, Values } from 'src/app/types/types';
 
@@ -9,16 +9,18 @@ import { DiagramCard, TotalValue, Values } from 'src/app/types/types';
   templateUrl: './diagram-card.component.html',
   styleUrl: './diagram-card.component.css',
 })
-export class DiagramCardComponent implements AfterContentInit {
+export class DiagramCardComponent {
+
+  child = contentChild.required(DiagramCard);
   
-  @ContentChild(DiagramCard) child!: DiagramCard; 
-  
-  title = computed<string>(() => this.child.title());
+  title = computed<string>(() => this.child().title());
 
   totalValue = computed<TotalValue | undefined>(() => {
-    if(!this.child || !this.child.totalValue) return;
+    const childInstance = this.child();
 
-    const totalValue = this.child.totalValue();
+    if(!childInstance.totalValue) return;
+
+    const totalValue = childInstance.totalValue();
 
     return {
       currentValue: totalValue.currentValue,
@@ -28,9 +30,11 @@ export class DiagramCardComponent implements AfterContentInit {
 
   values = computed<Values[] | undefined>(() => {
 
-    if(!this.child || !this.child.values) return;
+    const childInstance = this.child();
+
+    if(!childInstance.values) return;
     
-    const values = this.child.values();
+    const values = childInstance.values();
 
     const sum = values.reduce((acc, el) => acc + el.value, 0);
 
@@ -39,10 +43,8 @@ export class DiagramCardComponent implements AfterContentInit {
       value: el.value / sum * 100
     }))
   })
-      
-  ngAfterContentInit() {
-    
-  }
+
+  showLastDays = computed(() => this.child().showLastDays());
 
   valuesColors = [COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3];
 
