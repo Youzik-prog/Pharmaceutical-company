@@ -1,7 +1,7 @@
 import { Component, computed, effect, ElementRef, inject, input, Signal, signal, viewChild } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Chart, registerables } from 'chart.js';
-import { map, switchMap, tap } from 'rxjs';
+import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { COLOR_ACCENT, COLOR_ACCENT_2 } from 'src/app/constants/colors';
 import { CURRENT_DATE, SHOW_LAST_DAYS } from 'src/app/constants/mainContants';
 import { TestsService } from 'src/app/services/tests.service';
@@ -17,22 +17,24 @@ import { substractDaysBetweenTwoDates, substractDaysFromDate } from 'src/app/uti
 })
 export class TotalTestedDrugsComponent implements DiagramCard  {
 
+  private readonly testsService = inject(TestsService);
+
   showLastDays = input<number>(SHOW_LAST_DAYS);
   
   currentDate = input(CURRENT_DATE);
   
   startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
-  
-
-  private readonly testsService = inject(TestsService);
 
   private chart?: Chart;
 
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('totalTestedChart');
   
   chartData = toSignal(
-    toObservable(this.startDate).pipe(
-      switchMap(start => this.testsService.getTotalTestedDrugsStat(start, this.currentDate()))
+    combineLatest([
+      toObservable(this.startDate),
+      toObservable(this.currentDate)
+    ]).pipe(
+      switchMap(([start, end]) => this.testsService.getTotalTestedDrugsStat(start, end))
     )
   );
   
@@ -45,12 +47,15 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
   );
 
   totalPastTestedDrugsSum = toSignal(
-    toObservable(this.startDate).pipe(
-      switchMap(start => this.testsService.getTotalTestedDrugsStat(
+    combineLatest([
+      toObservable(this.startDate),
+      toObservable(this.currentDate)
+    ]).pipe(
+      switchMap(([start, end]) => this.testsService.getTotalTestedDrugsStat(
         substractDaysFromDate(
           start, 
-          substractDaysBetweenTwoDates(this.currentDate(), start)), 
-        this.currentDate()
+          substractDaysBetweenTwoDates(end, start)), 
+        end
         )
       ),
       map(stat => stat.dataset.reduce((acc, el) => acc + el, 0))
@@ -104,48 +109,52 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
       this.chart.update();
 
     } else {
-      this.chart = new Chart(el, {
-        type: 'bar',
-        data: {
-          labels: dataset.map(() => ''),
-          datasets: [{
-            data: dataset2 ?? [],
-            backgroundColor: COLOR_ACCENT,
-            borderRadius: 100,
-            borderSkipped: false,
-            barThickness: 4,
-          },
-          {
-            data: dataset.map(() => Math.max(...dataset)),
-            backgroundColor: COLOR_ACCENT_2,
-            borderRadius: 100,
+      this.createChart(el, dataset, dataset2);
+    }
+  }
 
-            borderSkipped: false,
-            barThickness: 4,
-          },],
+  private createChart(element: HTMLCanvasElement, dataset: number[], dataset2: number[] | undefined): void {
+    this.chart = new Chart(element, {
+      type: 'bar',
+      data: {
+        labels: dataset.map(() => ''),
+        datasets: [{
+          data: dataset2 ?? [],
+          backgroundColor: COLOR_ACCENT,
+          borderRadius: 100,
+          borderSkipped: false,
+          barThickness: 4,
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              display: false,
-              stacked: true,
-            },
-            y: {
-              display: false,
-              stacked: false,
-            }
+        {
+          data: dataset.map(() => Math.max(...dataset)),
+          backgroundColor: COLOR_ACCENT_2,
+          borderRadius: 100,
+
+          borderSkipped: false,
+          barThickness: 4,
+        },],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            display: false,
+            stacked: true,
           },
-          plugins: {
-            legend: { display: false },
-            tooltip: { enabled: false },
-          },
-          interaction: {
-            intersect: false,
+          y: {
+            display: false,
+            stacked: false,
           }
         },
-      })
-    }
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+        },
+        interaction: {
+          intersect: false,
+        }
+      },
+    })
   }
 }

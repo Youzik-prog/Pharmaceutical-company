@@ -16,9 +16,9 @@ export class TodayStatsComponent {
   
   testsService = inject(TestsService);
 
-  currentDate = signal(CURRENT_DATE);
-
   drugsService = inject(DrugsService);
+  
+  currentDate = signal(CURRENT_DATE);
 
   closestNonExpiredDrug: Signal<Drug | undefined> = toSignal(this.drugsService.getNonExpiredDrugs(this.currentDate())
   .pipe(map(drugs => drugs[0])));

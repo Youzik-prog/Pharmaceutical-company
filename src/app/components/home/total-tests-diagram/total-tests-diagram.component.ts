@@ -10,7 +10,7 @@ import { TestsService } from 'src/app/services/tests.service';
 import { Stat } from 'src/app/types/types';
 import { formatChartDate, generateDateRange, getSCCPropertyValue, substractDaysFromDate } from 'src/app/utils/functions';
 
-const initDaysRange = 7;
+const INIT_DAYS_RANGE = 7;
 
 @Component({
   selector: 'app-total-tests-diagram',
@@ -26,7 +26,7 @@ export class TotalTestsDiagramComponent {
 
   private chart?: Chart;
 
-  daysRange: WritableSignal<number> = signal(initDaysRange);
+  daysRange: WritableSignal<number> = signal(INIT_DAYS_RANGE);
 
   currentDate = signal(CURRENT_DATE);
 
@@ -75,75 +75,78 @@ export class TotalTestsDiagramComponent {
 
       this.chart.update();
     } else {
+      this.createChart(el, startDate, endDate, dataset, dataset2, labels);
+    }
+  }
 
-      this.chart = new Chart(el, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Total Tests',
-              data: dataset,
-              borderColor: COLOR_ACCENT,
-              borderWidth: 2,
-              pointRadius: 0,
-            },
-            {
-              label: 'Completed Tests',
-              data: dataset2 ?? [],
-              borderWidth: 2,
-              borderColor: '#5CBCF0',
-              borderDash: [2, 2],
-              pointRadius: 0
-            }
-          ]
+  private createChart(element: HTMLCanvasElement, startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined, labels: string[]): void {
+    this.chart = new Chart(element, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total Tests',
+            data: dataset,
+            borderColor: COLOR_ACCENT,
+            borderWidth: 2,
+            pointRadius: 0,
+          },
+          {
+            label: 'Completed Tests',
+            data: dataset2 ?? [],
+            borderWidth: 2,
+            borderColor: '#5CBCF0',
+            borderDash: [2, 2],
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        animation: {
+          duration: 750,
+          easing: 'easeInOutQuint',
         },
-        options: {
-          animation: {
-            duration: 750,
-            easing: 'easeInOutQuint',
-          },
-          scales: {
-            x: {
-              grid: {
-                display: true,
-                drawOnChartArea: true,
-              },
-              ticks: {
-                callback: function(_, index) {
-                  
-                  const currentLabels = this.chart.data.labels as string[];
-
-                  if(index === 0 || index === Math.floor(currentLabels.length / 2) || index === currentLabels.length - 1) {
-                    return currentLabels[index];
-                  }
-                  return '';
-                },
-                autoSkip: false,
-                maxRotation: 0,
-                minRotation: 0,
-              }
+        scales: {
+          x: {
+            grid: {
+              display: true,
+              drawOnChartArea: true,
             },
-            y: {
-              grid: {
-                display: false,
+            ticks: {
+              callback: function(_, index) {
+                
+                const currentLabels = this.chart.data.labels as string[];
+
+                if(index === 0 || index === Math.floor(currentLabels.length / 2) || index === currentLabels.length - 1) {
+                  return currentLabels[index];
+                }
+                return '';
               },
-              ticks: {
-                display: false,
-              },
-              border: {
-                display: false
-              }
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
             }
           },
-          plugins: {
-            legend: {
+          y: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              display: false,
+            },
+            border: {
               display: false
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
         }
-      });
-    }
+      }
+    });
   }
 
 }

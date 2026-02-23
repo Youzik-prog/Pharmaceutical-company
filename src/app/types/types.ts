@@ -1,4 +1,6 @@
-import { Signal, WritableSignal } from "@angular/core";
+import { input, InputSignal, Signal, WritableSignal } from "@angular/core";
+import { Chart } from "chart.js";
+import { CURRENT_DATE } from "../constants/mainContants";
 
 export interface Drug {
     id: number;
@@ -47,7 +49,7 @@ export type Values = {name: string, value: number};
 
 export abstract class DiagramCard {
     abstract title: Signal<string>;
+    abstract showLastDays: InputSignal<number>;
     abstract totalValue?: Signal<TotalValue>;
     abstract values?: Signal<Values[]>;
-    abstract showLastDays: Signal<number>;
 }

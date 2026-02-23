@@ -22,10 +22,12 @@ export class DiagramCardComponent {
 
     const totalValue = childInstance.totalValue();
 
+    const { currentValue, pastValue } = totalValue;
+
     return {
-      currentValue: totalValue.currentValue,
-      pastValue: totalValue.pastValue ? (totalValue.currentValue / totalValue.pastValue) - 1 : undefined, 
-    }
+      currentValue,
+      pastValue: pastValue ? (currentValue / pastValue) - 1 : undefined,
+    };
   });
 
   values = computed<Values[] | undefined>(() => {
