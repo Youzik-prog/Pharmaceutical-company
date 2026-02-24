@@ -26,7 +26,7 @@
                 <div class="flex justify-between font-medium text-sm text-secondary">
                     <div class="flex gap-2 items-center">
                         <div class="w-5 h-2.5 rounded-xs"
-                        [style.backgroundColor]="valuesColors[i % valuesColors.length]"></div>
+                        [style.backgroundColor]="item.color"></div>
                         <p>{{ item.name }}</p>
                     </div>
                     <p>{{ item.value | number:'1.0-0'}}%</p>

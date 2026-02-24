@@ -1,5 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, computed, contentChild, ContentChild } from '@angular/core';
+import { color } from 'chart.js/helpers';
 import { COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3 } from 'src/app/constants/colors';
 import { DiagramCard, TotalValue, Values } from 'src/app/types/types';
 
@@ -43,12 +44,11 @@ export class DiagramCardComponent {
 
     return values.map(el => ({
       name: el.name,
-      value: el.value / sum * 100
+      value: el.value / sum * 100,
+      color: el.color,
     }))
   })
 
   showLastDays = computed<number>(() => this.child().showLastDays());
-
-  valuesColors = [COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3];
 
 }

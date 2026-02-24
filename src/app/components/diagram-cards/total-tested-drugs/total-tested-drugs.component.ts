@@ -73,10 +73,12 @@ export class TotalTestedDrugsComponent extends DiagramCard  {
     return [{
       name: 'Completed',
       value: completed,
+      color: this.colors[0],
     },
     {
       name: 'Awaiting results',
       value: (total - completed),
+      color: this.colors[1]
     }]
   });
 
@@ -110,14 +112,14 @@ export class TotalTestedDrugsComponent extends DiagramCard  {
         labels: dataset.map(() => ''),
         datasets: [{
           data: dataset2 ?? [],
-          backgroundColor: COLOR_ACCENT,
+          backgroundColor: this.colors[0],
           borderRadius: 100,
           borderSkipped: false,
           barThickness: 4,
         },
         {
           data: dataset.map(() => Math.max(...dataset)),
-          backgroundColor: COLOR_ACCENT_2,
+          backgroundColor: this.colors[1],
           borderRadius: 100,
 
           borderSkipped: false,
@@ -147,4 +149,7 @@ export class TotalTestedDrugsComponent extends DiagramCard  {
       },
     })
   }
+
+  colors: string[] = [COLOR_ACCENT, COLOR_ACCENT_2]
+
 }

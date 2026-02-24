@@ -54,7 +54,11 @@ export interface Stat {
 }
 
 export type TotalValue = {currentValue: number, pastValue?: number};
-export type Values = {name: string, value: number};
+export type Values = {
+    name: string, 
+    value: number,
+    color: string
+};
 
 @Directive()
 export abstract class DiagramCard {
