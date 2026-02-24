@@ -1,0 +1,19 @@
+@import "./../../../../styles.css";
+
+@layer components {
+    .stats-item {
+        @apply flex gap-3;
+    }
+
+    .stats-item .image {
+        @apply size-14;
+    }
+
+    .stats-item .label {
+        @apply text-lg font-semibold;
+    }
+
+    .stats-item .description {
+        @apply text-secondary;
+    }
+}

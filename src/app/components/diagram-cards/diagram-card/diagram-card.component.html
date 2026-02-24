@@ -1,0 +1,32 @@
+<div class="flex flex-col w-max-83.75 h-68 p-4 bg-white border-2 border-border rounded-md">
+    <div class="flex gap-5 justify-between items-center font-semibold text-lg">
+        @let total = totalValue();
+        <div class="flex gap-3.5 items-center">
+            <h2>{{ title() }}</h2>
+            @if(total && total.pastValue) {
+                <div class="pl-2 pr-2 pt-1 pb-1 border-2 rounded-full border-amber-300 text-xs text-amber-600 bg-amber-100">{{ total.pastValue > 0 ? '+' : '' }}{{ total.pastValue | number: '1.1-1' }}%</div>
+            }
+        </div>
+        @if(total) {
+            <h2>{{ total.currentValue | number }}</h2>
+        }
+    </div>
+    <p class="mb-5 text-sm font-medium text-secondary">Last {{ showLastDays() }} days</p>
+    <div class="flex-1 flex justify-center min-h-0 w-full relative">
+        <div class="w-1/2 h-full relative">
+            <ng-content></ng-content>
+        </div>
+    </div>
+    <div class="mt-5">
+        @for (item of values(); track item.value; let i = $index) {
+            <div class="flex justify-between font-medium text-sm text-secondary">
+                <div class="flex gap-2 items-center">
+                    <div class="w-5 h-2.5 rounded-xs"
+                    [style.backgroundColor]="valuesColors[i % valuesColors.length]"></div>
+                    <p>{{ item.name }}</p>
+                </div>
+                <p>{{ item.value | number:'1.0-0'}}%</p>
+            </div>
+        }
+    </div>
+</div>
