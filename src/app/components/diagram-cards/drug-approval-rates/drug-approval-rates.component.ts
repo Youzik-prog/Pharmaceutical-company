@@ -2,9 +2,11 @@ import { Component, computed, effect, ElementRef, inject, input, signal, Signal,
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Chart } from 'chart.js';
 import { combineLatest, switchMap } from 'rxjs';
+import { COLOR_ACCENT } from 'src/app/constants/colors';
 import { SHOW_LAST_DAYS } from 'src/app/constants/mainContants';
 import { TestsService } from 'src/app/services/tests.service';
 import { DiagramCard, Stat, TotalValue, Values } from 'src/app/types/types';
+import { formatChartDate, generateDateRange } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-drug-approval-rates',
@@ -48,11 +50,95 @@ export class DrugApprovalRatesComponent extends DiagramCard {
   }
 
   drawChart(element: HTMLCanvasElement, data: Stat): void {
+    const {startDate, endDate, dataset, dataset2} = data;
 
+    const labels = generateDateRange(startDate, endDate).map(date => formatChartDate(date));
+
+    if(this.chart) {  
+      this.chart.data.datasets[0].data = dataset2 ?? [];
+      this.chart.data.datasets[1].data = dataset;
+      this.chart.data.labels = labels
+      
+      this.chart.update();
+
+    } else {
+      this.createChart(element, labels, startDate, endDate, dataset, dataset2);
+    }
   }
 
   createChart(element: HTMLCanvasElement, labels: string[], startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined): void {
+    this.chart = new Chart(element, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Approved Tests',
+            data: dataset2 ?? [],
+            borderColor: COLOR_ACCENT,
+            borderWidth: 2,
+            pointRadius: 0
+          },
+          {
+            label: 'Completed Tests',
+            data: dataset,
+            borderWidth: 2,
+            borderColor: '#D8DCE8',
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 750,
+          easing: 'easeInOutQuint',
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              callback: function(_, index) {
+                
+                const currentLabels = this.chart.data.labels as string[];
 
+                if(index === 0 || index === currentLabels.length - 1) {
+                  return currentLabels[index];
+                }
+                return '';
+              },
+              font: {
+                size: 14,
+              },
+              align: 'inner',
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
+            }
+          },
+          y: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              display: false,
+            },
+            border: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      },
+      
+    })
   }
 
 }
