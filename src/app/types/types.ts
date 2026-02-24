@@ -3,6 +3,18 @@ import { Chart } from "chart.js";
 import { CURRENT_DATE, SHOW_LAST_DAYS } from "../constants/mainContants";
 import { substractDaysFromDate } from "../utils/functions";
 
+export type Process = {
+    total: number;
+    current: number;
+}
+
+export type Status = {
+    healthy: number;
+    unhealthy: number;
+    dangerous: number;
+    noEffect: number;
+}
+
 export interface Drug {
     id: number;
     name: string;
@@ -10,16 +22,8 @@ export interface Drug {
     startDate: string;
     endDate: string;
     successReaction: boolean;
-    process: {
-        total: number;
-        current: number;
-    };
-    status: {
-        healthy: number;
-        unhealthy: number;
-        dangerous: number;
-        noEffect: number;
-    }
+    process: Process;
+    status: Status
 }
 
 export type People = {
@@ -67,9 +71,9 @@ export abstract class DiagramCard {
 
     showLastDays = input<number>(SHOW_LAST_DAYS);
     
-    currentDate = input(CURRENT_DATE);
+    currentDate = input<Date>(CURRENT_DATE);
     
-    startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
+    startDate = computed<Date>(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
 
     constructor() {
 

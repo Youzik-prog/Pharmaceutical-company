@@ -15,8 +15,6 @@ import { DiagramCard, Stat, TotalValue, Values } from 'src/app/types/types';
 })
 export class DrugApprovalRatesComponent extends DiagramCard {
 
-  values?: Signal<Values[]> | undefined;
-
   private readonly testsService = inject(TestsService);
 
   title: Signal<string> = signal('Drug approval rates');
@@ -40,7 +38,7 @@ export class DrugApprovalRatesComponent extends DiagramCard {
   totalCompletedSum = computed(() => this.chartData()?.dataset.reduce((acc, el) => acc + el, 0) ?? 0
   )
   
-  totalValue?: Signal<TotalValue>= computed<TotalValue>(() => ({
+  override totalValue = computed<TotalValue>(() => ({
     currentValue: this.totalApprovesSum(),
     pastValue: this.totalCompletedSum()
   }));
