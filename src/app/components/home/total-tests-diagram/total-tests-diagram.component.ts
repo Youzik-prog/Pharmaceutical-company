@@ -19,6 +19,8 @@ const INIT_DAYS_RANGE = 7;
   styleUrl: './total-tests-diagram.component.css',
 })
 export class TotalTestsDiagramComponent {
+
+  dateSelectVariants = [7, 14, 28];
   
   testsService = inject(TestsService);
 
@@ -26,9 +28,9 @@ export class TotalTestsDiagramComponent {
 
   private chart?: Chart;
 
-  daysRange: WritableSignal<number> = signal(INIT_DAYS_RANGE);
+  daysRange = signal<number>(INIT_DAYS_RANGE);
 
-  currentDate = signal(CURRENT_DATE);
+  currentDate = signal<Date>(CURRENT_DATE);
 
   startDate: Signal<Date> = computed(() => substractDaysFromDate(this.currentDate(), this.daysRange()));
 
@@ -37,7 +39,7 @@ export class TotalTestsDiagramComponent {
     end: this.currentDate(),
   })));
 
-  chartData = toSignal(
+  chartData = toSignal<Stat>(
     this.params$.pipe(
       switchMap(params => this.testsService.getTotalTestedDrugsStat(params.start, params.end))
     )

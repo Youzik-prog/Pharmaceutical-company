@@ -21,15 +21,15 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
 
   showLastDays = input<number>(SHOW_LAST_DAYS);
   
-  currentDate = input(CURRENT_DATE);
+  currentDate = input<Date>(CURRENT_DATE);
   
-  startDate = computed(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
+  startDate = computed<Date>(() => substractDaysFromDate(this.currentDate(), this.showLastDays()));
 
   private chart?: Chart;
 
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('totalTestedChart');
   
-  chartData = toSignal(
+  chartData = toSignal<Stat | undefined>(
     combineLatest([
       toObservable(this.startDate),
       toObservable(this.currentDate)
@@ -38,15 +38,15 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
     )
   );
   
-  totalTestedDrugsSum = computed(() => 
+  totalTestedDrugsSum = computed<number>(() => 
     this.chartData()?.dataset.reduce((acc, el) => acc + el, 0) ?? 0
   );
 
-  totalCompletedDrugsSum = computed(() => 
-    this.chartData()?.dataset2?.reduce((acc, el) => acc + el, 0)
+  totalCompletedDrugsSum = computed<number>(() => 
+    this.chartData()?.dataset2?.reduce((acc, el) => acc + el, 0) ?? 0
   );
 
-  totalPastTestedDrugsSum = toSignal(
+  totalPastTestedDrugsSum = toSignal<number | undefined>(
     combineLatest([
       toObservable(this.startDate),
       toObservable(this.currentDate)
@@ -64,12 +64,12 @@ export class TotalTestedDrugsComponent implements DiagramCard  {
 
   title = signal<string>('Total tested drugs');
   
-  totalValue = computed<TotalValue>(() => ({
-    currentValue: this.totalTestedDrugsSum() ?? 0,
+  totalValue = computed<TotalValue | undefined>(() => ({
+    currentValue: this.totalTestedDrugsSum(),
     pastValue: this.totalPastTestedDrugsSum()
   }));
 
-  values: Signal<Values[]> | undefined = computed(() => {
+  values = computed<Values[] | undefined>(() => {
     const completed = this.totalCompletedDrugsSum();
     const total = this.totalTestedDrugsSum();
 

@@ -1,6 +1,6 @@
 import { Component, inject, signal, Signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
 import { CURRENT_DATE } from 'src/app/constants/mainContants';
 import { DrugsService } from 'src/app/services/drugs.service';
 import { TestsService } from 'src/app/services/tests.service';
@@ -15,33 +15,28 @@ import { Drug } from 'src/app/types/types';
 export class TodayStatsComponent {
   
   testsService = inject(TestsService);
-
   drugsService = inject(DrugsService);
   
-  currentDate = signal(CURRENT_DATE);
+  currentDate = signal<Date>(CURRENT_DATE);
 
-  closestNonExpiredDrug: Signal<Drug | undefined> = toSignal(this.drugsService.getNonExpiredDrugs(this.currentDate())
-  .pipe(map(drugs => drugs[0])));
-
-  vaccinesOnHold: Signal<number | undefined> = toSignal(
-    this.testsService.getTestByDay(this.currentDate()).pipe(
-      map(test => {
-        if(!test)
-          return undefined;
-
-        return test.tests - test.completed;
-      })
+  closestNonExpiredDrug = toSignal<Drug | undefined>(
+    toObservable(this.currentDate).pipe(
+      switchMap((current: Date) => this.drugsService.getNonExpiredDrugs(current)), 
+      map(drugs => drugs[0])
     )
-  )
+  );
 
-  productsOutOfStock: Signal<number | undefined> = toSignal(
-    this.testsService.getTestByDay(this.currentDate()).pipe(
-      map(test => {
-        if(!test)
-          return undefined;
-
-        return test.completed - test.approves;
-      })
+  vaccinesOnHold = toSignal<number | undefined>(
+    toObservable(this.currentDate).pipe(
+      switchMap(date => this.testsService.getTestByDay(date)),
+      map(test => test ? test.tests - test.completed : undefined)
     )
-  )
+  );
+
+  productsOutOfStock = toSignal<number | undefined>(
+    toObservable(this.currentDate).pipe(
+      switchMap(date => this.testsService.getTestByDay(date)),
+      map(test => test ? test.completed - test.approves : undefined)
+    )
+  );
 }

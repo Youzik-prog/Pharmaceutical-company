@@ -1,4 +1,4 @@
-import { input, InputSignal, Signal, WritableSignal } from "@angular/core";
+import { input, InputSignal, signal, Signal, WritableSignal } from "@angular/core";
 import { Chart } from "chart.js";
 import { CURRENT_DATE } from "../constants/mainContants";
 
@@ -50,6 +50,6 @@ export type Values = {name: string, value: number};
 export abstract class DiagramCard {
     abstract title: Signal<string>;
     abstract showLastDays: InputSignal<number>;
-    abstract totalValue?: Signal<TotalValue>;
-    abstract values?: Signal<Values[]>;
+    totalValue: Signal<TotalValue | undefined> = signal(undefined);
+    values: Signal<Values[] | undefined> = signal(undefined);
 }
