@@ -38,9 +38,15 @@ export class TestsService {
   getTotalTestedDrugsStat(from: Date, to: Date): Observable<Stat> {
     return this.getPeriodTests(from, to).pipe(
       map(tests => {
-        const totalTests = tests.map(test => test.tests);
 
-        const totalCompletedTests = tests.map(test => test.completed);
+        const { totalTests, totalCompletedTests } = tests.reduce(
+          (acc, test) => {
+            acc.totalTests.push(test.tests);
+            acc.totalCompletedTests.push(test.completed);
+            return acc;
+          },
+          { totalTests: [] as number[], totalCompletedTests: [] as number[] }
+        );
 
         return {
           startDate: from,
