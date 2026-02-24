@@ -1,4 +1,4 @@
-import { computed, Directive, effect, ElementRef, input, InputSignal, Signal, WritableSignal } from "@angular/core";
+import { computed, Directive, effect, ElementRef, input, InputSignal, signal, Signal, WritableSignal } from "@angular/core";
 import { Chart } from "chart.js";
 import { CURRENT_DATE, SHOW_LAST_DAYS } from "../constants/mainContants";
 import { substractDaysFromDate } from "../utils/functions";
@@ -22,20 +22,24 @@ export interface Drug {
     }
 }
 
+export type People = {
+    amount: number,
+    tested: number
+}
+
+export type TestingProcess = {
+    preclinicalTesting: number,
+    clinicalTrials: number,
+    regulatoryApproval: number
+}
+
 export interface Test {
     date: string,
     tests: number,
     completed: number,
     approves: number,
-    people: {
-        amount: number,
-        tested: number
-    },
-    testingProcess: {
-        preclinicalTesting: number,
-        clinicalTrials: number,
-        regulatoryApproval: number
-    }
+    people: People,
+    testingProcess: TestingProcess
 }
 
 export interface Stat {
@@ -51,8 +55,8 @@ export type Values = {name: string, value: number};
 @Directive()
 export abstract class DiagramCard {
     abstract title: Signal<string>;
-    abstract totalValue?: Signal<TotalValue>;
-    abstract values?: Signal<Values[]>;
+    totalValue: Signal<TotalValue | undefined> = signal(undefined);
+    values: Signal<Values[] | undefined> = signal(undefined);
     
     protected abstract chart?: Chart;
 

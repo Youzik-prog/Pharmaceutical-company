@@ -18,9 +18,10 @@ export class DiagramCardComponent {
   totalValue = computed<TotalValue | undefined>(() => {
     const childInstance = this.child();
 
-    if(!childInstance.totalValue) return;
-
     const totalValue = childInstance.totalValue();
+
+    if(!totalValue) return;
+
 
     const { currentValue, pastValue } = totalValue;
 
@@ -30,13 +31,13 @@ export class DiagramCardComponent {
     };
   });
 
-  values = computed<Values[] | undefined>(() => {
+  values = computed<Values[]>(() => {
 
     const childInstance = this.child();
 
-    if(!childInstance.values) return;
-    
     const values = childInstance.values();
+
+    if(!values) return [];
 
     const sum = values.reduce((acc, el) => acc + el.value, 0);
 
@@ -46,7 +47,7 @@ export class DiagramCardComponent {
     }))
   })
 
-  showLastDays = computed(() => this.child().showLastDays());
+  showLastDays = computed<number>(() => this.child().showLastDays());
 
   valuesColors = [COLOR_ACCENT, COLOR_ACCENT_2, COLOR_ACCENT_3];
 
