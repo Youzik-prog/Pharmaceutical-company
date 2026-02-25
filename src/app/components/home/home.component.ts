@@ -13,10 +13,11 @@ import { DrugsService } from 'src/app/services/drugs.service';
 import { TotalTestsDiagramComponent } from "./total-tests-diagram/total-tests-diagram.component";
 import { TodayStatsComponent } from "./today-stats/today-stats.component";
 import { TotalTestedDrugsComponent } from "../diagram-cards/total-tested-drugs/total-tested-drugs.component";
+import { DrugApprovalRatesComponent } from "../diagram-cards/drug-approval-rates/drug-approval-rates.component";
 
 @Component({
   selector: 'app-home',
-  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent, TotalTestedDrugsComponent],
+  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent, TotalTestedDrugsComponent, DrugApprovalRatesComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
