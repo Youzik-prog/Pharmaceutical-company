@@ -14,10 +14,12 @@ import { TotalTestsDiagramComponent } from "./total-tests-diagram/total-tests-di
 import { TodayStatsComponent } from "./today-stats/today-stats.component";
 import { TotalTestedDrugsComponent } from "../diagram-cards/total-tested-drugs/total-tested-drugs.component";
 import { DrugApprovalRatesComponent } from "../diagram-cards/drug-approval-rates/drug-approval-rates.component";
+import { TestingProcessComponent } from "../diagram-cards/testing-process/testing-process.component";
+import { NumberOfPeopleTestedComponent } from "../diagram-cards/number-of-people-tested/number-of-people-tested.component";
 
 @Component({
   selector: 'app-home',
-  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent, TotalTestedDrugsComponent, DrugApprovalRatesComponent],
+  imports: [DiagramCardComponent, TotalTestsDiagramComponent, TodayStatsComponent, TotalTestedDrugsComponent, DrugApprovalRatesComponent, TestingProcessComponent, NumberOfPeopleTestedComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
