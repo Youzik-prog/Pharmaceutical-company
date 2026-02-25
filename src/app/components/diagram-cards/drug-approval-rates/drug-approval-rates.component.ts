@@ -30,7 +30,7 @@ export class DrugApprovalRatesComponent extends DiagramCard {
       toObservable(this.startDate),
       toObservable(this.currentDate)
     ]).pipe(
-      switchMap(([start, end]) => this.testsService.getDrugApprovalRates(start, end))
+      switchMap(([start, end]) => this.testsService.getDrugApprovalRatesStat(start, end))
     )
   );
 
