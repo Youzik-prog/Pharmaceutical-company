@@ -2,7 +2,9 @@
     <div class="absolute flex justify-center items-center w-full h-full text-lg text-secondary">
         <div>{{ percent() | number:'1.0-0' }}%</div>
     </div>
-    <div class="flex justify-center h-full w-full relative">
-        <canvas #testingProcess class="diagram h-full"></canvas>
+    <div class="flex justify-center h-full w-full">
+        <div class="h-full w-fit relative">
+            <canvas #testingProcess class="diagram h-full"></canvas>
+        </div>
     </div>
 </div>

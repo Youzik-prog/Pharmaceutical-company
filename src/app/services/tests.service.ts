@@ -88,7 +88,25 @@ export class TestsService {
           const { preclinicalTesting, clinicalTrials, regulatoryApproval } = test.testingProcess;
           return [acc[0] + preclinicalTesting, acc[1] + clinicalTrials, acc[2] + regulatoryApproval];
         }, 
-        [0, 0, 0])
+          [0, 0, 0]);
+
+        return {
+          startDate: from,
+          endDate: substractDaysFromDate(to, 1),
+          dataset: dataset
+        }
+      })
+    )
+  }
+
+  getNumberOfPeopleTestedStat(from: Date, to: Date): Observable<Stat> {
+    return this.getPeriodTests(from, to).pipe(
+      map(tests => {
+        const dataset = tests.reduce((acc, test) => {
+          const { tested, amount  } = test.people;
+          return [acc[0] + tested, acc[1] + (amount - tested)];
+        }, 
+          [0, 0]);
 
         return {
           startDate: from,

@@ -1,35 +1,34 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, computed, ElementRef, inject, signal, Signal, viewChild } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Chart, ChartTypeRegistry, Point, BubbleDataPoint } from 'chart.js';
 import { combineLatest, switchMap } from 'rxjs';
-import { COLOR_ACCENT, COLOR_ACCENT_3, COLOR_ACCENT_4 } from 'src/app/constants/colors';
+import { COLOR_ACCENT, COLOR_ACCENT_2 } from 'src/app/constants/colors';
 import { TestsService } from 'src/app/services/tests.service';
 import { DiagramCard, Stat, Values } from 'src/app/types/types';
 
 @Component({
-  selector: 'app-testing-process',
-  imports: [DecimalPipe],
-  templateUrl: './testing-process.component.html',
-  styleUrl: './testing-process.component.css',
-  providers: [{provide: DiagramCard, useExisting: TestingProcessComponent}]
+  selector: 'app-number-of-people-tested',
+  imports: [],
+  templateUrl: './number-of-people-tested.component.html',
+  styleUrl: './number-of-people-tested.component.css',
+  providers: [{provide: DiagramCard, useExisting: NumberOfPeopleTestedComponent}]
 })
-export class TestingProcessComponent extends DiagramCard {
+export class NumberOfPeopleTestedComponent extends DiagramCard {
 
   testsService = inject(TestsService);
 
-  override title = signal<string>('Testing process');
+  override title = signal<string>('Number of people tested');
 
   protected chart?: Chart;
-  
-  protected canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('testingProcess');
-  
+
+  protected canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('numberOfPeopleTested');
+
   override chartData = toSignal<Stat | undefined>(
     combineLatest([
       toObservable(this.startDate),
       toObservable(this.currentDate)
     ]).pipe(
-      switchMap(([start, end]) => this.testsService.getTestingProcessStat(start, end))
+      switchMap(([start, end]) => this.testsService.getNumberOfPeopleTestedStat(start, end))
     )
   );
 
@@ -49,29 +48,8 @@ export class TestingProcessComponent extends DiagramCard {
         value: chartData.dataset[1],
         color: this.COLORS[1]
       },
-      {
-        name: this.NAMES[2],
-        value: chartData.dataset[2],
-        color: this.COLORS[2]
-      },
     ]
   });
-
-  percent = computed<number>(() => {
-    const values = this.values();
-
-    if (values.length === 0) return 0;
-
-    const sum = values.reduce((acc, value) => acc + value.value, 0);
-
-    if (sum === 0) return 0;
-
-    return values[0].value / sum * 100;
-  })
-
-  constructor() {
-    super();
-  }
 
   override drawChart(element: HTMLCanvasElement, data: Stat): void {
     const {startDate, endDate, dataset, dataset2} = data;
@@ -87,38 +65,48 @@ export class TestingProcessComponent extends DiagramCard {
       this.createChart(element, labels, startDate, endDate, dataset, dataset2);
     }
   }
-
   override createChart(element: HTMLCanvasElement, labels: string[], startDate: Date, endDate: Date, dataset: number[], dataset2: number[] | undefined): void {
     this.chart = new Chart(element, {
       type: 'doughnut',
       data: {
-        labels: labels,
         datasets: [{
           data: dataset,
           backgroundColor: this.COLORS,
           borderWidth: 0,
-          spacing: 4,
-          
-        }]
+          borderRadius: 8,
+        }],
       },
       options: {
-        cutout: '90%',
+        rotation: 270,
+        circumference: 180,
+
+        cutout: '87%',
+        responsive: true,
+        maintainAspectRatio: false,
+
         animation: {
           duration: 1500,
           easing: 'easeOutQuart',
           animateRotate: true,
-          // animateScale: true
+          animateScale: false
         },
+        
         plugins: {
-          legend: {display: false},
-          tooltip: {enabled: true},
+          legend: { display: false },
+          tooltip: { enabled: true },
+        },
+
+        layout: {
+          padding: {
+              bottom: 0
+          }
         }
       }
     })
   }
 
-  NAMES: string[] = ['Preclinical testing', 'Clinical trials', 'Regulatory approval'] as const;
-
-  COLORS: string[] = [COLOR_ACCENT, COLOR_ACCENT_4, COLOR_ACCENT_3] as const;
+    NAMES: string[] = ['Tested', 'Non-tested'] as const;
+  
+    COLORS: string[] = [COLOR_ACCENT, COLOR_ACCENT_2] as const;
 
 }
