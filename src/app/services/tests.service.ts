@@ -58,4 +58,27 @@ export class TestsService {
     )
   }
 
+  getDrugApprovalRates(from: Date, to: Date): Observable<Stat> {
+    return this.getPeriodTests(from, to).pipe(
+      map(tests => {
+
+        const { completedTests, approvedTests } = tests.reduce(
+          (acc, test) => {
+            acc.completedTests.push(test.completed);
+            acc.approvedTests.push(test.approves);
+            return acc;
+          },
+          { completedTests: [] as number[], approvedTests: [] as number[] }
+        );
+        
+        return {
+          startDate: from,
+          endDate: substractDaysFromDate(to, 1),
+          dataset: completedTests,
+          dataset2: approvedTests
+        }
+      })
+    )
+  }
+
 }
