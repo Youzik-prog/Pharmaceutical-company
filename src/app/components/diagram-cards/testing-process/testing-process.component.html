@@ -1,10 +1,9 @@
-<div class="h-full w-full relative">
-    <div class="absolute flex justify-center items-center w-full h-full text-lg text-secondary">
-        <div>{{ percent() | number:'1.0-0' }}%</div>
+<div class="h-full w-full relative flex justify-center items-center">
+    <div class="absolute flex justify-center items-center">
+        <span class="text-lg text-secondary">{{ percent() | number:'1.0-0' }}%</span>
     </div>
-    <div class="flex justify-center h-full w-full">
-        <div class="h-full w-fit relative">
-            <canvas #testingProcess class="diagram h-full"></canvas>
-        </div>
+
+    <div class="h-full aspect-square relative">
+        <canvas #testingProcess></canvas>
     </div>
 </div>

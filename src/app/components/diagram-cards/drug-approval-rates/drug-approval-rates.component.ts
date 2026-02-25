@@ -91,8 +91,9 @@ export class DrugApprovalRatesComponent extends DiagramCard {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        resizeDelay: 10,
         animation: {
-          duration: 750,
+          duration: 1500,
           easing: 'easeInOutQuint',
         },
         scales: {

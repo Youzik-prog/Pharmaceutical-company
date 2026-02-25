@@ -129,6 +129,7 @@ export class TotalTestedDrugsComponent extends DiagramCard  {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        resizeDelay: 10,
         scales: {
           x: {
             display: false,

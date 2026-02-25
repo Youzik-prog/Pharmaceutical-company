@@ -105,8 +105,9 @@ export class TotalTestsDiagramComponent {
         ]
       },
       options: {
+        resizeDelay: 10,
         animation: {
-          duration: 750,
+          duration: 1500,
           easing: 'easeInOutQuint',
         },
         scales: {

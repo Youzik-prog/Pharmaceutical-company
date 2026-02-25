@@ -80,9 +80,9 @@ export class NumberOfPeopleTestedComponent extends DiagramCard {
         rotation: 270,
         circumference: 180,
 
+        resizeDelay: 10,
+
         cutout: '87%',
-        responsive: true,
-        maintainAspectRatio: false,
 
         animation: {
           duration: 1500,

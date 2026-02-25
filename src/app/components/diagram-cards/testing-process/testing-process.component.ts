@@ -103,11 +103,11 @@ export class TestingProcessComponent extends DiagramCard {
       },
       options: {
         cutout: '90%',
+        resizeDelay: 10,
         animation: {
           duration: 1500,
           easing: 'easeOutQuart',
           animateRotate: true,
-          // animateScale: true
         },
         plugins: {
           legend: {display: false},
