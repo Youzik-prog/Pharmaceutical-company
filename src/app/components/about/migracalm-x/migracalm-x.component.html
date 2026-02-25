@@ -1,0 +1,31 @@
+<div class="flex flex-col p-4 border rounded-md border-border bg-white">
+    <div class="mb-12.5">
+        <div class="mb-8">
+            <h1 class="mb-2 text-[32px] font-semibold">Migracalm-X - new drug testing for chronic migraine</h1>
+            <p class="text-sm text-secondary">Tavern on the Greend, New York</p>
+        </div>
+        <div class="flex gap-8 justify-between items-center border border-border pb-6 pt-6 pl-4 pr-4">
+            @for (item of INFO; track item.title; let i = $index) {
+                <div class="">
+                    <div class="flex gap-2.5 items-center mb-4">
+                        <div class="flex justify-center items-center size-10 bg-sky-200 rounded-sm">
+                            <img src="assets/icons/location.svg" alt="location">
+                        </div>
+                        <h3 class="text-lg font-semibold">{{ item.title }}</h3>
+                    </div>
+                    <p class="text-secondary">{{ item.description }}</p>
+                </div>
+                @if(i < INFO.length - 1) {
+                    <div class="h-16 border border-border"></div>
+                }
+            }
+        </div>
+    </div>
+    <div class="flex gap-4 w-full h-11 text-base font-semibold">
+        <button class="flex-1 h-full p-3 rounded-md text-white bg-accent cursor-pointer">Start Process</button>
+        <button class="flex-1 flex gap-2.5 justify-center items-center h-full rounded-md border border-border bg-background cursor-pointer">
+            <img src="assets/icons/calendar.svg" alt="calendar">
+            <div class="text-accent">Add to Calendar</div>
+        </button>
+    </div>
+</div>

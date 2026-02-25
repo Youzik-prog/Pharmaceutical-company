@@ -1,0 +1,11 @@
+@import "./../../../../styles.css";
+
+@layer components {
+    /* .info-item {
+        @apply flex-1;
+    }
+
+    .info-item .icon {
+        @apply size-10 bg-sky-200;
+    } */
+}
