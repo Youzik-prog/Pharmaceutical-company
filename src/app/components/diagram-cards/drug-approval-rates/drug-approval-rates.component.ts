@@ -19,13 +19,13 @@ export class DrugApprovalRatesComponent extends DiagramCard {
 
   private readonly testsService = inject(TestsService);
 
-  title: Signal<string> = signal('Drug approval rates');
+  title = signal<string>('Drug approval rates');
   
   protected chart?: Chart;
 
   protected canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('drugApprovalRates');
   
-  chartData = toSignal(
+  chartData = toSignal<Stat | undefined>(
     combineLatest([
       toObservable(this.startDate),
       toObservable(this.currentDate)
