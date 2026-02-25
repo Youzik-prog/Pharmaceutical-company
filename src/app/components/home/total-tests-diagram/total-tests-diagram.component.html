@@ -15,8 +15,6 @@
 
     @for (variant of dateSelectVariants; track variant) {
         <option [value]="variant">{{ current | substractDate: variant | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-        <option [value]="variant">{{ current | substractDate: variant | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
-        <option [value]="variant">{{ current | substractDate: variant | date: 'MMM d' }} - {{currentDay}}, {{currentYear}}</option>
     }
     </select>
 </div>
