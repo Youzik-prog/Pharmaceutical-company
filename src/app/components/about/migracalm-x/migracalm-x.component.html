@@ -1,0 +1,37 @@
+<div class="flex flex-col p-4 border rounded-md border-border bg-white">
+    <div class="mb-12.5">
+        <div class="mb-8">
+            <h1 class="text-[32px] font-semibold">Migracalm-X - new drug testing for chronic migraine</h1>
+            <p class="text-sm text-secondary">Tavern on the Greend, New York</p>
+        </div>
+        <div class="flex flex-wrap gap-x-17 gap-y-8 border border-border pb-6 pt-6 pl-4 pr-4">
+            @for (item of info(); track item.title; let i = $index) {
+                <div class="flex-1">
+                    <div class="flex gap-2.5 items-center mb-4">
+                        <div class="flex justify-center items-center size-10 min-w-10 bg-sky-200 rounded-sm">
+                            <img src="assets/icons/location.svg" alt="location">
+                        </div>
+                        <h3 class="text-lg font-semibold">{{ item.title }}</h3>
+                    </div>
+                    <p class="whitespace-pre-line text-secondary">{{ item.description }}</p>
+                </div>
+                @if(i < info().length - 1) {
+                    <div class="max-[470px]:hidden h-16 border-l border-border"></div>
+                }
+            }
+        </div>
+    </div>
+    <div class="flex gap-4 w-full min-h-11 items-stretch text-base font-semibold">
+        <button 
+            (click)="startProcessRedirection()" 
+            class="flex-1 p-3 rounded-md text-white bg-accent cursor-pointer 
+            transition-all active:outline-1 active:outline-accent"
+        >Start Process</button>
+        <button (click)="addToCalendar()" 
+        class="flex-1 flex gap-2.5 justify-center items-center p-3 rounded-md border border-border bg-background cursor-pointer 
+        transition-all active:outline-1 active:outline-border">
+            <img src="assets/icons/calendar.svg" alt="">
+            <div class="text-accent">Add to Calendar</div>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="flex gap-10 flex-col">
+    <div>
+        <h2 class="mb-4">Manufacturer</h2>
+        <div class="flex gap-3.5 items-center">
+            <div class="size-10 aspect-square rounded-md bg-blue-950"></div>
+            <p class="text-secondary">Serenity Health Clinic</p>
+        </div>
+    </div>
+    <div class="flex gap-4 flex-col">
+        <h2>Location</h2>
+        <div class="w-full">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5003.455138110232!2d-73.91464188656302!3d40.66952854304445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25c5e40f49157%3A0xa086e3eb79717403!2zNDM0IFJvY2thd2F5IEF2ZSwgQnJvb2tseW4sIE5ZIDExMjEyLCDQodCo0JA!5e0!3m2!1sru!2spl!4v1772094178299!5m2!1sru!2spl" 
+                class="w-full"
+                height="300" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        <div class="flex gap-2">
+            <div class="">{{ DIRECTIONS[0] }}</div>
+            <div class="text-secondary">{{ DIRECTIONS[1] }}</div>
+        </div>
+        <button (click)="copyDirections()" 
+        class="flex gap-2.5 justify-center items-center h-11 rounded-md border border-border cursor-pointer
+        transition-all active:outline-1 active:outline-border">
+            <img src="assets/icons/direction.svg" alt="">
+            <span class="text-base text-accent font-semibold">{{ isCopied() ? 'Directions Copied!' : 'Get directions' }}</span>
+        </button>
+    </div>
+    <div class="flex gap-4 flex-col">
+        <h2>Tags</h2>
+        <div class="flex gap-4">
+            <div class="tag">Medicine #459026</div>
+            <div class="tag">Vaccine #78</div>
+        </div>
+    </div>
+</div>
