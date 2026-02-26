@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { WEBSOCKET_URL } from '../constants/mainContants';
+import { CHAT_LOCAL_STORAGE_KEY, WEBSOCKET_URL } from '../constants/mainContants';
 import { ChatMessage, ConnectionStatuses } from '../types/types';
 import { webSocket } from 'rxjs/webSocket';
 import { BehaviorSubject, map, tap } from 'rxjs';
@@ -11,12 +11,14 @@ export class ChatService {
   
   private readonly url = WEBSOCKET_URL;
 
+  private readonly localStorageKey = CHAT_LOCAL_STORAGE_KEY;
+
   private socket$ = webSocket<string>({
     url: this.url,
     deserializer: (message => message.data)
   });
 
-  readonly messages$ = new BehaviorSubject<ChatMessage[]>([]);
+  readonly messages$ = new BehaviorSubject<ChatMessage[]>(this.loadMessagesFromStorage());
 
   readonly status$ = new BehaviorSubject<ConnectionStatuses>('successful');
 
@@ -42,6 +44,25 @@ export class ChatService {
         this.status$.next('closed');
       }
     });
+
+    this.messages$.pipe(
+      tap((messages) => {
+        localStorage.setItem(this.localStorageKey, JSON.stringify(messages));
+      })
+    ).subscribe();
+  }
+
+  private loadMessagesFromStorage(): ChatMessage[] {
+    const messages = localStorage.getItem(this.localStorageKey);
+    if(!messages) return [];
+
+    try {
+      return JSON.parse(messages);
+    } catch(error) {
+      console.error('LocalStorage parsing error', error);
+      return [];
+    }
+
   }
   
   sendMessage(message: string) {
