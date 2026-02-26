@@ -9,7 +9,8 @@
              class="chat-container">
                 @for (message of messages(); track message.id) {
                     @if(message.isSelf) {
-                        <div class="self-end max-w-full p-2 border-2 rounded-md rounded-br-none border-border">
+                        <div (contextmenu)="onRightClick($event, message)"
+                        class="self-end max-w-full p-2 border-2 rounded-md rounded-br-none border-border">
                             <p class="whitespace-pre-line wrap-break-word">
                                 {{ message.text }}
                             </p>
@@ -23,19 +24,32 @@
                         </div>
                     }
                 }
+                @if (contextMenu(); as menu) {
+                    <div class="absolute z-1 min-w-30 rounded-md border border-border  bg-white shadow-md"
+                    [style.top.px]="menu.y"
+                    [style.left.px]="menu.x"
+                    (click)="$event.stopPropagation(); closeContextMenu()"> 
+                        <button (click)="editMessage(menu.message)" 
+                        class="w-full px-4 py-2 hover:bg-background cursor-pointer">Edit</button>
+                        
+                        <button (click)="deleteMessage(menu.message)" 
+                        class="w-full px-4 py-2 hover:bg-background text-red-500 cursor-pointer">Delete</button>
+                    </div>
+                }
                 @if (status() === 'error') {
                     <div class="self-start max-w-full p-2 border rounded-md border-red-500 text-red-500">
                         <p class="whitespace-pre-line wrap-break-word">LOST WEBSOCKET CONNECTION<br>Please reload the page!</p>
                     </div>
                 }
             </div>
-            <form (submit)="sendMessage(); $event.preventDefault()">
+            @let messageFunction = editedMessage() ? updateMessage.bind(this) : sendMessage.bind(this);
+            <form (submit)="messageFunction(); $event.preventDefault()">
                 <div class="flex gap-1  w-full">
                     <textarea #messageInput 
                     rows="1"
                     maxlength="1000"
                     (input)="adjustTextAreaHeight($event)"
-                    (keydown.enter)="$event.preventDefault(); sendMessage(); adjustTextAreaHeight($event)"
+                    (keydown.enter)="$event.preventDefault(); messageFunction(); adjustTextAreaHeight($event)"
                     placeholder="Type a message..."
                     class="h-fit max-h-20 w-full p-3 rounded-md border border-border resize-none overflow-y-auto
                     transition-all focus:outline-accent"
@@ -46,7 +60,7 @@
                     transition-all active:outline-1 active:outline-accent">X</button>
                     <button type="submit"
                     class="h-full p-3 rounded-md text-white bg-accent cursor-pointer 
-                    transition-all active:outline-1 active:outline-accent">Send</button>
+                    transition-all active:outline-1 active:outline-accent">{{ editedMessage() ? 'Edit' : 'Send'}}</button>
                 </div>
             </form>
         </div>

@@ -31,7 +31,6 @@ export class ChatService {
           time: new Date(),
           status: 'successful',
         });
-        console.log(this.messages$.value);
       })
     ).subscribe({
       error: (err) => {
@@ -66,6 +65,15 @@ export class ChatService {
 
     this.addChatMessage(newMessage);
   }
+
+  updateMessage(message: ChatMessage) {
+    this.messages$.next(this.messages$.value.map(msg => msg.id === message.id ? message : msg));
+  }
+
+  deleteMessage(message: ChatMessage) {
+    this.messages$.next(this.messages$.value.filter(msg => msg.id !== message.id));
+  }
+
 
   private addChatMessage(message: ChatMessage) {
     this.messages$.next([...this.messages$.value, message]);

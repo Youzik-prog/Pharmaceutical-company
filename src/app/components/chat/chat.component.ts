@@ -1,6 +1,7 @@
-import { Component, effect, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, HostListener, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChatService } from 'src/app/services/chat.service';
+import { ChatMessage } from 'src/app/types/types';
 
 @Component({
   selector: 'app-chat',
@@ -14,6 +15,9 @@ export class ChatComponent  {
 
   messages = toSignal(this.chatService.messages$);
   status = toSignal(this.chatService.status$);
+
+  contextMenu = signal<{x: number, y: number, message: ChatMessage} | null>(null);
+  editedMessage = signal<ChatMessage | null>(null);
 
   input = viewChild.required<ElementRef<HTMLInputElement>>('messageInput');
   chatContainer = viewChild<ElementRef<HTMLDivElement>>('chatContainer');
@@ -29,13 +33,51 @@ export class ChatComponent  {
     })
   }
 
+  @HostListener('document:click')
+  closeContextMenu() {
+    this.contextMenu.set(null);
+  }
+
+  onRightClick(event: MouseEvent, message: ChatMessage) {
+    event.preventDefault();
+    this.contextMenu.set({
+      x: event.clientX,
+      y: event.clientY,
+      message
+    });
+  }
+
   sendMessage() {
     const message = this.input().nativeElement.value;
     if(message) {
       this.chatService.sendMessage(message);
       this.input().nativeElement.value = '';
     }
-    console.log(this.messages());
+  }
+
+  editMessage(message: ChatMessage) {
+    const input = this.input().nativeElement;
+    input.value = message.text;
+    input.focus();
+
+    this.editedMessage.set(message);
+  }
+
+  updateMessage() {
+    const newMessageText = this.input().nativeElement.value;
+    const message = this.editedMessage();
+
+    if(newMessageText && message) {
+      message.text = newMessageText;
+      this.chatService.updateMessage(message)
+      this.input().nativeElement.value = '';
+    }
+
+    this.editedMessage.set(null);
+  }
+
+  deleteMessage(message: ChatMessage) {
+    this.chatService.deleteMessage(message);
   }
 
   private scrollToBottom() {
