@@ -1,1 +1,13 @@
-<p>chat.component works!</p>
+<div class="mb-14">
+    <h1 class="page-name">Chat</h1>
+    <p class="page-description">Chat with the professional AI assistant which can understand you...</p>
+</div>
+<div class="w-full bg-white">
+    <form (submit)="sendMessage(); $event.preventDefault()">
+        <input #messageInput type="text">
+        <button type="submit">Sumbit</button>
+    </form>
+    @for (item of messages(); track $index) {
+        <p>{{ item.text }}</p>
+    }
+</div>

@@ -53,6 +53,20 @@ export interface Stat {
     dataset2?: number[]
 }
 
+export type ChatMessage = {
+    id: string,
+    text: string;
+    isSelf: boolean;
+    time: Date;
+    status: 'pending' | 'successful' | 'error';
+}
+
+export const enum ConnectionStatuses {
+    'connecting',
+    'open',
+    'closed'
+}
+
 export type TotalValue = {currentValue: number, pastValue?: number};
 export type Values = {
     name: string, 
