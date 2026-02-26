@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { COMPANY_DIRECTIONS } from 'src/app/constants/mainContants';
 
 @Component({
   selector: 'app-map',
@@ -8,4 +9,14 @@ import { Component } from '@angular/core';
 })
 export class MapComponent {
 
+  isCopied = signal<boolean>(false);
+
+  copyDirections() {
+    navigator.clipboard.writeText(this.DIRECTIONS.join(' '));
+    this.isCopied.set(true);
+
+    setTimeout(() => this.isCopied.set(false), 2000);
+  }
+
+  DIRECTIONS = COMPANY_DIRECTIONS;
 }

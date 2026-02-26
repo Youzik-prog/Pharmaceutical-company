@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { COMPANY_DIRECTIONS } from 'src/app/constants/mainContants';
+import { formatAmericanHours, formatChartDate, formatGoogleDate } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-migracalm-x',
@@ -7,16 +10,43 @@ import { Component } from '@angular/core';
   styleUrl: './migracalm-x.component.css',
 })
 export class MigracalmXComponent {
-  INFO: {title: string, description: string}[] = [
+
+  rounter = inject(Router);
+  
+  DIRECTIONS = COMPANY_DIRECTIONS;
+  
+  startDate = signal<Date>(new Date('2026-03-01T10:00:00'));
+  
+  endDate = signal<Date>(new Date('2026-03-08T16:00:00'));
+  
+  info = linkedSignal<{title: string, description: string}[]>(() => [
     {
-    title: 'Location',
-    description: `434 Rockaway Ave, ,BrooklynNew York,
-11212-5636`
+      title: 'Location',
+    description: this.DIRECTIONS.join(' ')
     },
     {
       title: 'Date & Time',
-      description: `28th June - 2nd July 2022
-10 am - 4 pm Eastern Daylight Time `
+      description: `${formatChartDate(this.startDate())} - ${formatChartDate(this.endDate())} ${this.endDate().getFullYear()}
+      ${formatAmericanHours(this.startDate())} - ${formatAmericanHours(this.endDate())} Eastern Daylight Time `
     }
-  ]
+  ])
+
+  startProcessRedirection() {
+    this.rounter.navigate(['/process']);
+  }
+
+  addToCalendar() {
+
+    const base = 'https://www.google.com/calendar/render?action=TEMPLATE';
+    const title = encodeURIComponent('Testing Process Appointment');
+    const location = encodeURIComponent(this.DIRECTIONS.join(' '));
+
+    const start = formatGoogleDate(this.startDate());
+    const end = formatGoogleDate(this.endDate());
+    const dates = `${start}/${end}`;
+
+    const url = `${base}&text=${title}&location=${location}&dates=${dates}`;
+  
+    window.open(url, '_blank');
+  }
 }

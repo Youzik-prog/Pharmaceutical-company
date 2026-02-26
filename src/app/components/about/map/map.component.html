@@ -19,12 +19,14 @@
             </iframe>
         </div>
         <div class="flex gap-2">
-            <div class="">434 Rockaway Ave, 11212-5636</div>
-            <div class="text-secondary">Brooklyn New York</div>
+            <div class="">{{ DIRECTIONS[0] }}</div>
+            <div class="text-secondary">{{ DIRECTIONS[1] }}</div>
         </div>
-        <button class="flex gap-2.5 justify-center items-center h-11 rounded-md border border-border cursor-pointer">
+        <button (click)="copyDirections()" 
+        class="flex gap-2.5 justify-center items-center h-11 rounded-md border border-border cursor-pointer
+        transition-all active:outline-1 active:outline-border">
             <img src="assets/icons/direction.svg" alt="">
-            <span class="text-base text-accent font-semibold">Get directions</span>
+            <span class="text-base text-accent font-semibold">{{ isCopied() ? 'Directions Copied!' : 'Get directions' }}</span>
         </button>
     </div>
     <div class="flex gap-4 flex-col">

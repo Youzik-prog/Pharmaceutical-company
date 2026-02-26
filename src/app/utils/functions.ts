@@ -35,6 +35,18 @@ export function formatChartDate(date: Date): string {
   return `${day} ${month}`;
 }
 
+export function formatGoogleDate(date: Date): string {
+  return date.toISOString()
+    .replace(/[-:]/g, '')
+    .split('.')[0] + 'Z';
+}
+
+export function formatAmericanHours(date: Date): string {
+  const hours = date.getHours();
+  
+  return hours > 12 ? `${hours - 12} pm` : `${hours} am`;
+}
+
 export function getSCCPropertyValue(property: string): string {
     const style = getComputedStyle(document.documentElement);
     return style.getPropertyValue(property).trim();
