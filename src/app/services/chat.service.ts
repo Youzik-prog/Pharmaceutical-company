@@ -11,7 +11,7 @@ export class ChatService {
   
   private readonly url = WEBSOCKET_URL;
 
-  private socket$ = webSocket<any>({
+  private socket$ = webSocket<string>({
     url: this.url,
     deserializer: (message => message.data)
   });
