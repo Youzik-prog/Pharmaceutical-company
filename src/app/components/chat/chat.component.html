@@ -6,7 +6,7 @@
     <div class="flex justify-center h-full w-full">
         <div class="flex gap-8 flex-col p-4 min-h-75 h-[70vh] w-1/2 min-w-[320px] max-w-full border border-border rounded-md bg-white">
             <div #chatContainer
-             class="flex-1 flex gap-2 flex-col overflow-y-scroll">
+             class="chat-container">
                 @for (message of messages(); track message.id) {
                     @if(message.isSelf) {
                         <div class="self-end max-w-full p-2 border-2 rounded-md rounded-br-none border-border">

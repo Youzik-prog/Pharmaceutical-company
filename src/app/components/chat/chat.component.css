@@ -1,0 +1,8 @@
+@import './../../../styles.css';
+
+@layer components {
+    .chat-container {
+        @apply flex-1 flex gap-2 flex-col pr-2 overflow-y-scroll;
+        scrollbar-color: var(--color-accent) transparent;
+    }
+}

@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { WEBSOCKET_URL } from '../constants/mainContants';
 import { ChatMessage, ConnectionStatuses } from '../types/types';
 import { webSocket } from 'rxjs/webSocket';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +22,7 @@ export class ChatService {
 
   constructor() {
     this.socket$.pipe(
+      map((message: string) => message.replace(/^"|"$/g, '').replace(/\\n/g, '\n')),
       tap((message: string) => {
         this.addChatMessage({
           id: crypto.randomUUID(),
