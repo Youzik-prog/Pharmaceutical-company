@@ -1,13 +1,54 @@
-<div class="mb-14">
-    <h1 class="page-name">Chat</h1>
-    <p class="page-description">Chat with the professional AI assistant which can understand you...</p>
-</div>
-<div class="w-full bg-white">
-    <form (submit)="sendMessage(); $event.preventDefault()">
-        <input #messageInput type="text">
-        <button type="submit">Sumbit</button>
-    </form>
-    @for (item of messages(); track $index) {
-        <p>{{ item.text }}</p>
-    }
+<div class="w-full h-full mb-15">
+    <div class="mb-14">
+        <h1 class="page-name">Chat</h1>
+        <p class="page-description">Chat with the professional AI assistant which can understand only you...</p>
+    </div>
+    <div class="flex justify-center h-full w-full">
+        <div class="flex gap-8 flex-col p-4 min-h-75 h-[70vh] w-1/2 min-w-[320px] max-w-full border border-border rounded-md bg-white">
+            <div #chatContainer
+             class="flex-1 flex gap-2 flex-col overflow-y-scroll">
+                @for (message of messages(); track message.id) {
+                    @if(message.isSelf) {
+                        <div class="self-end max-w-full p-2 border-2 rounded-md rounded-br-none border-border">
+                            <p class="whitespace-pre-line wrap-break-word">
+                                {{ message.text }}
+                            </p>
+                        </div>
+                    } 
+                    @else {
+                        <div class="self-start max-w-full p-2 border rounded-md rounded-tl-none border-accent text-accent">
+                            <p class="whitespace-pre-line wrap-break-word">
+                                {{ message.text }}
+                            </p>
+                        </div>
+                    }
+                }
+                @if (status() === 'error') {
+                    <div class="self-start max-w-full p-2 border rounded-md border-red-500 text-red-500">
+                        <p class="whitespace-pre-line wrap-break-word">LOST WEBSOCKET CONNECTION<br>Please reload the page!</p>
+                    </div>
+                }
+            </div>
+            <form (submit)="sendMessage(); $event.preventDefault()">
+                <div class="flex gap-1  w-full">
+                    <textarea #messageInput 
+                    rows="1"
+                    maxlength="1000"
+                    (input)="adjustTextAreaHeight($event)"
+                    (keydown.enter)="$event.preventDefault(); sendMessage(); adjustTextAreaHeight($event)"
+                    placeholder="Type a message..."
+                    class="h-fit max-h-20 w-full p-3 rounded-md border border-border resize-none overflow-y-auto
+                    transition-all focus:outline-accent"
+                    style="scrollbar-width: none;"></textarea>
+
+                    <button type="reset"
+                    class="h-full p-3 rounded-full border text-accent border-border cursor-pointer 
+                    transition-all active:outline-1 active:outline-accent">X</button>
+                    <button type="submit"
+                    class="h-full p-3 rounded-md text-white bg-accent cursor-pointer 
+                    transition-all active:outline-1 active:outline-accent">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

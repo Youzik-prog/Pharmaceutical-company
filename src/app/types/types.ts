@@ -61,11 +61,8 @@ export type ChatMessage = {
     status: 'pending' | 'successful' | 'error';
 }
 
-export const enum ConnectionStatuses {
-    'connecting',
-    'open',
-    'closed'
-}
+export type ConnectionStatuses = 'successful' | 'error' | 'closed';
+
 
 export type TotalValue = {currentValue: number, pastValue?: number};
 export type Values = {

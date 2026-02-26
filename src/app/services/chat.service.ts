@@ -18,6 +18,8 @@ export class ChatService {
 
   readonly messages$ = new BehaviorSubject<ChatMessage[]>([]);
 
+  readonly status$ = new BehaviorSubject<ConnectionStatuses>('successful');
+
   constructor() {
     this.socket$.pipe(
       tap((message: string) => {
@@ -31,8 +33,14 @@ export class ChatService {
         console.log(this.messages$.value);
       })
     ).subscribe({
-      error: (err) => console.error('WebSocket error:', err),
-      complete: () => console.log('WebSocket connection closed')
+      error: (err) => {
+        console.error('WebSocket error:', err);
+        this.status$.next('error');
+      },
+      complete: () => {
+        console.log('WebSocket connection closed');
+        this.status$.next('closed');
+      }
     });
   }
   
