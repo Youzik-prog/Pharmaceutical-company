@@ -19,17 +19,21 @@ export class MigracalmXComponent {
   
   endDate = signal<Date>(new Date('2026-03-08T16:00:00'));
   
-  info = linkedSignal<{title: string, description: string}[]>(() => [
-    {
+  info = linkedSignal<{title: string, description: string}[]>(() => {
+    const start = this.startDate();
+    const end = this.endDate();
+
+    return [{
       title: 'Location',
     description: this.DIRECTIONS.join(' ')
     },
     {
       title: 'Date & Time',
-      description: `${formatChartDate(this.startDate())} - ${formatChartDate(this.endDate())} ${this.endDate().getFullYear()}
-      ${formatAmericanHours(this.startDate())} - ${formatAmericanHours(this.endDate())} Eastern Daylight Time `
+      description: `${formatChartDate(start)} - ${formatChartDate(end)} ${end.getFullYear()}
+      ${formatAmericanHours(start)} - ${formatAmericanHours(end)} Eastern Daylight Time `
     }
-  ])
+  ]}
+  )
 
   startProcessRedirection() {
     this.rounter.navigate(['/process']);
