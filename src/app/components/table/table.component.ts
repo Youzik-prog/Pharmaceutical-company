@@ -20,7 +20,7 @@ export class TableComponent {
 
   private initLoadedDrugsAmount = 9;
 
-  loadedDrugs: WritableSignal<number> = signal(this.initLoadedDrugsAmount); 
+  loadedDrugs = signal<number>(this.initLoadedDrugsAmount); 
 
   allDrugs: Signal<Drug[]> = toSignal(
     toObservable(this.loadedDrugs).pipe(

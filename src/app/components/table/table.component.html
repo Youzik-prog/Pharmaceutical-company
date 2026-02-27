@@ -6,7 +6,7 @@
 <div class="w-full mb-8 overflow-x-auto overflow-y-hidden">
     <table class="w-full border-collapse">
         <thead>
-            <tr class="h-8 border-b-2 border-t-2 border-gray-200">
+            <tr class="h-8 border-b-2 border-t-2 border-border">
                 <th class="th cell">NAME</th>
                 <th class="th cell">LOCATION</th>
                 <th class="th cell">START DATE</th>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             @for (row of allDrugs(); track row.id) {
-                <tr class="h-14 border-b-2 border-gray-200">
+                <tr class="h-14 border-b-2 border-border">
                     <td class="cell text-accent font-semibold">{{ row.name }}</td>
                     <td class="cell td-font">{{ row.location }}</td>
                     <td class="cell td-font">{{ row.startDate | date:'mediumDate'}}</td>
@@ -60,7 +60,7 @@
     @let all = allDrugsAmount();
 
     @if(loaded !== all) {
-        <div class="flex items-center gap-2.5 h-14 border-b-2 border-gray-200">
+        <div class="flex items-center gap-2.5 h-14 border-b-2 border-border">
             <p class="td-font">1 to {{ loaded }} items of {{ all }}</p>
             <button (click)="loadAllDrugs()" class="flex gap-2.5 cursor-pointer">
                 <p class="text-accent font-normal">View all</p>
