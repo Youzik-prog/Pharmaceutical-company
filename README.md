@@ -1,59 +1,50 @@
-# PharmaceuticalCompany
+# Pharmaceutical Company
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.1.
+Это проект с сайтом лекарств, рассчитаный на работу с Angular, Tailwind CSS, API и WebSocket.
 
-## Development server
+## Функциональность
 
-To start a local development server, run:
+В проекте имеется 4 страницы:
+1. **Домашняя страница**🏠. В ней находятся несколько диаграмм, данные для которых берутся из [DummyJSON](https://dummyjson.com/) API. Так же у основной диаграммы можно выбрать диапозон времени.
+2. **Страница с таблицей**📊. В ней находится таблица, в которой отображаются данные уже из другого [DummyJSON](https://dummyjson.com/) API. Сначала в ней отображается первые 9 записей, но после нажатия _View all_ отображаются и всё остальные.
+3. **Страница с чатом**💬. В ней находится чат, который работает по WebSocket через `wss://ws.ifelse.io`. В чате есть возможность отправлять сообщения и получать их. При нажатии на правую кнопку мыши по своему сообщению его можно изменить или удалить. Также переписка в чате хранится в localStorage.
+4. **Страница о компании**ℹ️. В ней есть возможность посмотреть карту, скопировать адрес и добавить в [Google Календарь](https://calendar.google.com) новое мероприятие, основываясь на данных с сайта.
 
-```bash
+Так же в проекте настроена маршрутизация и имеется адаптивная вёрстка.
+
+## Зависимости
+* @angular/common: ^21.0.0,
+* @angular/compiler: ^21.0.0,
+* @angular/core: ^21.0.0,
+* @angular/forms: ^21.0.0,
+* @angular/platform-browser: ^21.0.0,
+* @angular/router: ^21.0.0,
+* rxjs: ~7.8.0,
+* tslib: ^2.3.0
+* @angular/build: ^21.0.1,
+* @angular/cli: ^21.0.1,
+* @angular/compiler-cli: ^21.0.0,
+* @tailwindcss/postcss: ^4.1.18,
+* autoprefixer: ^10.4.24,
+* jsdom: ^27.1.0,
+* postcss: ^8.5.6,
+* tailwindcss: ^4.1.18,
+* typescript: ~5.9.2,
+* vitest: ^4.0.8
+
+## Запуск проекта
+Достаточно перейти по ссылке: https://youzik-prog.github.io/Pharmaceutical-company/
+
+## Локальный запуск проекта
+
+Для начала нужно скачать ZIP-архив проекта, либо использовать комманду в терминале:
+```Bash
+git clone https://github.com/Youzik-prog/Pharmaceutical-company
+```
+После чего нужно в терминале перейти в директорию с этим проектом и запустить с помощью команды:
+```Bash
 ng serve
 ```
+⚠️Важно подметить, что для корректной работы проекта нужен Angular 21!
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+При успешнй сборке проекта нужно в поисковую строку браузера ввести http://localhost:4200 и проект запустится
