@@ -1,13 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, OnDestroy, signal } from '@angular/core';
 import { CHAT_LOCAL_STORAGE_KEY, WEBSOCKET_URL } from '../constants/mainContants';
 import { ChatMessage, ConnectionStatuses } from '../types/types';
 import { webSocket } from 'rxjs/webSocket';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChatService {
+export class ChatService implements OnDestroy {
   
   private readonly url = WEBSOCKET_URL;
 
@@ -22,18 +22,20 @@ export class ChatService {
 
   readonly status$ = new BehaviorSubject<ConnectionStatuses>('successful');
 
+  private destroy$ = new Subject<void>();
+
   constructor() {
     this.socket$.pipe(
       map((message: string) => message.replace(/^"|"$/g, '').replace(/\\n/g, '\n')),
+      takeUntil(this.destroy$),
       tap((message: string) => {
         this.addChatMessage({
           id: crypto.randomUUID(),
           text: message, 
           isSelf: false, 
           time: new Date(),
-          status: 'successful',
         });
-      })
+      }),
     ).subscribe({
       error: (err) => {
         console.error('WebSocket error:', err);
@@ -46,10 +48,15 @@ export class ChatService {
     });
 
     this.messages$.pipe(
+      takeUntil(this.destroy$),
       tap((messages) => {
         localStorage.setItem(this.localStorageKey, JSON.stringify(messages));
       })
     ).subscribe();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadMessagesFromStorage(): ChatMessage[] {
@@ -72,17 +79,9 @@ export class ChatService {
       text: message,
       isSelf: true,
       time: new Date(),
-      status: 'pending',
     };
 
-    try {
-      this.socket$.next(message);
-
-      newMessage.status = 'successful';
-    } catch (error) {
-      newMessage.status = 'error';
-      console.error('Error sending message:', error);
-    }
+    this.socket$.next(message);
 
     this.addChatMessage(newMessage);
   }

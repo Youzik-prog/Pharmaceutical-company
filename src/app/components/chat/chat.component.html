@@ -27,7 +27,8 @@
                         </div>
                     }
                 }
-                @if (contextMenu(); as menu) {
+                @let menu = contextMenu();
+                @if (menu) {
                     <div class="absolute z-1 min-w-30 rounded-md border border-border  bg-white shadow-md"
                     [style.top.px]="menu.y"
                     [style.left.px]="menu.x"
@@ -45,14 +46,16 @@
                     </div>
                 }
             </div>
-            @let messageFunction = editedMessage() ? updateMessage.bind(this) : sendMessage.bind(this);
-            <form (submit)="messageFunction(); $event.preventDefault()">
+            @let editedMsg = editedMessage();
+            @let messageFunction = editedMsg ? updateMessage.bind(this) : sendMessage.bind(this);
+            <form (submit)="messageFunction($event)">
                 <div class="flex gap-1  w-full">
-                    <textarea #messageInput 
+                    <textarea #messageInput
+                    [formControl]="input"
                     rows="1"
                     maxlength="1000"
                     (input)="adjustTextAreaHeight($event)"
-                    (keydown.enter)="$event.preventDefault(); messageFunction(); adjustTextAreaHeight($event)"
+                    (keydown.enter)="messageFunction($event); adjustTextAreaHeight($event)"
                     placeholder="Type a message..."
                     class="h-fit max-h-20 w-full p-3 rounded-md border border-border resize-none overflow-y-auto
                     transition-all focus:outline-accent"
@@ -63,7 +66,7 @@
                     transition-all active:outline-1 active:outline-accent">X</button>
                     <button type="submit"
                     class="h-full min-w-16 w-1/4 p-3 rounded-md text-white bg-accent cursor-pointer 
-                    transition-all active:outline-1 active:outline-accent">{{ editedMessage() ? 'Edit' : 'Send'}}</button>
+                    transition-all active:outline-1 active:outline-accent">{{ editedMsg ? 'Edit' : 'Send'}}</button>
                 </div>
             </form>
         </div>

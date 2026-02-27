@@ -58,7 +58,6 @@ export type ChatMessage = {
     text: string;
     isSelf: boolean;
     time: Date;
-    status: 'pending' | 'successful' | 'error';
 }
 
 export type ConnectionStatuses = 'successful' | 'error' | 'closed';
