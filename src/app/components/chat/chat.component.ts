@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, effect, ElementRef, HostListener, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChatService } from 'src/app/services/chat.service';
@@ -5,7 +6,7 @@ import { ChatMessage } from 'src/app/types/types';
 
 @Component({
   selector: 'app-chat',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
 })

@@ -10,17 +10,20 @@
                 @for (message of messages(); track message.id) {
                     @if(message.isSelf) {
                         <div (contextmenu)="onRightClick($event, message)"
-                        class="self-end max-w-full p-2 border-2 rounded-md rounded-br-none border-border">
+                        class="self-end max-w-full p-2 mb-1.5 border-2 rounded-md rounded-br-none border-border">
                             <p class="whitespace-pre-line wrap-break-word">
                                 {{ message.text }}
                             </p>
+                            <p class="text-end text-[10px] opacity-50 text-secondary">{{ message.time | date:'HH:mm' }}</p>
                         </div>
+
                     } 
                     @else {
-                        <div class="self-start max-w-full p-2 border rounded-md rounded-tl-none border-accent text-accent">
+                        <div class="self-start max-w-full p-2 mb-1.5 border rounded-md rounded-tl-none border-accent text-accent">
                             <p class="whitespace-pre-line wrap-break-word">
                                 {{ message.text }}
                             </p>
+                            <p class="text-[10px] opacity-50 text-secondary">{{ message.time | date:'HH:mm' }}</p>
                         </div>
                     }
                 }
