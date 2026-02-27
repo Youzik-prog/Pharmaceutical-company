@@ -36,7 +36,7 @@ export class MigracalmXComponent {
   )
 
   startProcessRedirection() {
-    this.rounter.navigate(['/process']);
+    this.rounter.navigate(['/chat']);
   }
 
   addToCalendar() {
